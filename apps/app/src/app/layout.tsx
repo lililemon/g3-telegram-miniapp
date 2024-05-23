@@ -2,7 +2,9 @@ import "~/styles/globals.css";
 
 import { GeistSans } from "geist/font/sans";
 
+import Script from "next/script";
 import { TRPCReactProvider } from "~/trpc/react";
+import { Providers } from "./providers";
 
 export const metadata = {
   title: "Create T3 App",
@@ -18,7 +20,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${GeistSans.variable}`}>
       <body>
-        <TRPCReactProvider>{children}</TRPCReactProvider>
+        <Script src="https://telegram.org/js/telegram-web-app.js"></Script>
+        <Providers>
+          <TRPCReactProvider>{children}</TRPCReactProvider>
+        </Providers>
       </body>
     </html>
   );

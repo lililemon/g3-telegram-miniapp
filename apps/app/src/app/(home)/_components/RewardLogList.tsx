@@ -10,7 +10,7 @@ export const RewardLogList = () => {
   const { isAuthenticated } = useIsAuthenticated();
   const LIMIT = 10;
   const [page] = useQueryState("reward_page", parseAsInteger.withDefault(1));
-  const { data, isPending } = api.reward.getMyRewardLogList.useQuery(
+  const { data, isPending, isSuccess } = api.reward.getMyRewardLogList.useQuery(
     { limit: LIMIT, page },
     {
       enabled: isAuthenticated,
@@ -31,16 +31,17 @@ export const RewardLogList = () => {
           </Table.Header>
 
           <Table.Body>
-            {data?.items.map((item) => (
-              <Table.Row key={item.id}>
-                <Table.Cell>{item.rewardType}</Table.Cell>
-                <Table.Cell>
-                  {format(item.createdAt, "yyyy-MM-dd HH:mm:ss")}
-                </Table.Cell>
+            {isSuccess &&
+              data.items.map((item) => (
+                <Table.Row key={item.id}>
+                  <Table.Cell>{item.rewardType}</Table.Cell>
+                  <Table.Cell>
+                    {format(item.createdAt, "yyyy-MM-dd HH:mm:ss")}
+                  </Table.Cell>
 
-                <Table.Cell>{formatNumber(item.point)}</Table.Cell>
-              </Table.Row>
-            ))}
+                  <Table.Cell>{formatNumber(item.point)}</Table.Cell>
+                </Table.Row>
+              ))}
           </Table.Body>
         </Table.Root>
       </Spinner>

@@ -4,14 +4,17 @@
   "experimentalUI": true,
   "pipeline": {
     "build": {
-      "dependsOn": ["^build", "^db:generate"],
-      "outputs": [".next/**", "!.next/cache/**"]
+      "dependsOn": ["^build"],
+      "outputs": [".next/**", "!.next/cache/**", "dist/**"]
+    },
+    "app#build": {
+      "env": ["DATABASE_URL", "JWT_SECRET", "PORT"]
     },
     "lint": {
       "dependsOn": ["^lint"]
     },
     "dev": {
-      "dependsOn": ["^db:generate"],
+      "dependsOn": ["database#build"],
       "cache": false,
       "persistent": true
     },
@@ -25,5 +28,6 @@
       "cache": false,
       "interactive": true
     }
-  }
+  },
+  "globalEnv": ["VERCEL_URL", "NODE_ENV", "SKIP_ENV_VALIDATION"]
 }

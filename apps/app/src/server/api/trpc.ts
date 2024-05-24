@@ -11,7 +11,7 @@ import superjson from "superjson";
 import { ZodError } from "zod";
 
 import { db } from "~/server/db";
-import { AuthToken, decodeAuthToken } from "../_utils/jwt";
+import { decodeAuthToken, type AuthToken } from "../_utils/jwt";
 
 /**
  * 1. CONTEXT

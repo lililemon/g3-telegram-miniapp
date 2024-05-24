@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite-node -w ./src/app.ts",
-    "build": "tsc && vite build"
+    "build": "tsc"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",

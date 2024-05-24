@@ -1,6 +1,4 @@
 import {
-  Slice,
-  StateInit,
   WalletContractV1R1,
   WalletContractV1R2,
   WalletContractV1R3,
@@ -9,6 +7,8 @@ import {
   WalletContractV3R1,
   WalletContractV3R2,
   WalletContractV4 as WalletContractV4R2,
+  type Slice,
+  type StateInit,
 } from "@ton/ton";
 import { Buffer } from "buffer";
 import { WalletContractV4R1 } from "./wallet-contract-v4-r1";

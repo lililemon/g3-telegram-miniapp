@@ -12,9 +12,9 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
     <TRPCReactProvider>
       <TonConnectUIProvider
         manifestUrl={MANIFEST_URL}
-        actionsConfiguration={{
-          twaReturnUrl: "https://t.me/DemoDappWithTonConnectBot/demo",
-        }}
+        // actionsConfiguration={{
+        //   twaReturnUrl: "https://t.me/g3stgbot/demo",
+        // }}
       >
         <BackendAuthProvider>{children}</BackendAuthProvider>
       </TonConnectUIProvider>

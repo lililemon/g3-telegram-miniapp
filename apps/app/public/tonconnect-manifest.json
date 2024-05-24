@@ -1,7 +1,5 @@
 {
-  "url": "https://github.com/ton-connect/demo-telegram-bot",
+  "url": "https://staging.miniapp.gall3ry.io",
   "name": "Gall3ry Staging",
-  "iconUrl": "https://ton-connect.github.io/demo-dapp-with-react-ui/apple-touch-icon.png",
-  "termsOfUseUrl": "https://ton-connect.github.io/demo-dapp-with-react-ui/terms-of-use.txt",
-  "privacyPolicyUrl": "https://ton-connect.github.io/demo-dapp-with-react-ui/privacy-policy.txt"
+  "iconUrl": "https://www.gall3ry.io/assets/landing/union/gall3ry-logo-squared.png"
 }

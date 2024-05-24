@@ -1,7 +1,7 @@
 {
-  "url": "https://g3-miniapp.vercel.app",
-  "name": "G3 MiniApp",
-  "iconUrl": "https://g3-miniapp.vercel.app/favicon.ico",
-  "termsOfUseUrl": "https://g3-miniapp.vercel.app",
-  "privacyPolicyUrl": "https://g3-miniapp.vercel.app"
+  "url": "https://github.com/ton-connect/demo-telegram-bot",
+  "name": "Gall3ry Staging",
+  "iconUrl": "https://ton-connect.github.io/demo-dapp-with-react-ui/apple-touch-icon.png",
+  "termsOfUseUrl": "https://ton-connect.github.io/demo-dapp-with-react-ui/terms-of-use.txt",
+  "privacyPolicyUrl": "https://ton-connect.github.io/demo-dapp-with-react-ui/privacy-policy.txt"
 }

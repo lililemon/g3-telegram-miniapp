@@ -1,138 +1,124 @@
-import readline from "readline";
-import { Api, TelegramClient } from "telegram";
-import { NewMessage } from "telegram/events";
-import { StringSession } from "telegram/sessions";
+import { Telegraf } from "telegraf";
+import { InlineQueryResult, InputTextMessageContent } from "telegraf/types";
 
-const apiId = 25258261;
-const apiHash = "ecdcb0e838175aee63d57acdbf9c76b0";
-const stringSession = new StringSession();
-// "1BQANOTEuMTA4LjU2LjE1MgG7mY5To3m/pUcnHtxONet31e9ytg1ptRkILpGV3oBoQxRfTtprRdn2wu8KlGHJmlWlXju0ODxI7LcUjpnwKLgqWNFA4nCLEl4p20y/eEWeul2F00XsFMq7lVcOD9Rc5ZTWMhhekQoos8P3RMD/z1mBmAw01oVfBn33VH4mAnVDOaRcD53Hov6railOLc76vRugtT03UhFzeqDfbNPPI25IOUt9msdVQboUhee5I7ch49xylRYf8MhxzEswnR1jLQKxn0SF7y8UUdzZRmgkhWpPVV8kpHt6yylT71DEvFHzQtNi59v5K6GIAGOdsuQIeh0YYdKsjMKijAqj08NvCQIFHg=="
+const botToken = "6963110935:AAFAgq9J5qo7Z3TL5YOWAmt1PQhCmke1_3U";
+const bot = new Telegraf(botToken);
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
+bot.command("quit", async (ctx) => {
+  // Explicit usage
+  await ctx.telegram.leaveChat(ctx.message.chat.id);
+
+  // Using context shortcut
+  await ctx.leaveChat();
 });
 
-let client: TelegramClient;
+// bot.on(message("text"), async (ctx) => {
+//   // Explicit usage
+//   await ctx.telegram.sendMessage(
+//     ctx.message.chat.id,
+//     `Hello ${ctx.state.role}`
+//   );
 
-const botUsername = "@G3TelegramMiniApp1_bot";
+//   // Using context shortcut
+//   await ctx.reply(`Hello ${ctx.state.role}`);
+// });
 
-(async () => {
-  console.log("Loading interactive example...");
-  client = new TelegramClient(stringSession, apiId, apiHash, {
-    connectionRetries: 5,
-  });
-  await client.start({
-    botAuthToken: "6950081608:AAGHJhGDI9xZP9-ayWO9jr-Cn-oqSEWLvro",
-    // phoneNumber: async () =>
-    //   new Promise((resolve) =>
-    //     rl.question("Please enter your number: ", resolve)
-    //   ),
-    // password: async () =>
-    //   new Promise((resolve) =>
-    //     rl.question("Please enter your password: ", resolve)
-    //   ),
-    // phoneCode: async () =>
-    //   new Promise((resolve) =>
-    //     rl.question("Please enter the code you received: ", resolve)
-    //   ),
-    // onError: (err) => console.log(err),
-  });
-  console.log("You should now be connected.");
+// onupdate
 
-  client.addEventHandler(async (update: Api.TypeUpdate) => {
-    if (update instanceof Api.UpdateBotInlineQuery) {
-      const query = await client.invoke(
-        new Api.messages.SetInlineBotResults({
-          queryId: update.queryId,
-          private: false,
-          results: [
-            new Api.InputBotInlineResult({
-              id: "test_article",
-              type: "article",
-              title: "Hello, world!",
-              description: "This is a test article",
-              url: "https://example.com",
-              thumb: new Api.InputWebDocument({
-                url: "https://api.dicebear.com/8.x/micah/png?seed=123",
-                size: 0,
-                mimeType: "image/png",
-                attributes: [],
-              }),
-              sendMessage: new Api.InputBotInlineMessageText({
-                message: "Hello, world!",
-              }),
-            }),
-            new Api.InputBotInlineResult({
-              id: "alo",
-              type: "article",
-              title: "Share this OCC to your friends",
-              description: "Share this OCC to your friends",
-              url: "https://example.com",
-              thumb: new Api.InputWebDocument({
-                url: "https://api.dicebear.com/8.x/micah/png?seed=124",
-                size: 0,
-                mimeType: "image/png",
-                attributes: [],
-              }),
-              sendMessage: new Api.InputBotInlineMessageText({
-                message: "Hello, world!",
-              }),
-            }),
+bot.on("message", async (ctx) => {
+  console.log("message", ctx.message);
+});
+
+bot.on("callback_query", async (ctx) => {
+  console.log(`Received callback query`, ctx.callbackQuery);
+
+  // Explicit usage
+  await ctx.telegram.answerCbQuery(ctx.callbackQuery.id);
+
+  // Using context shortcut
+  await ctx.answerCbQuery();
+});
+
+bot.on("inline_query", async (ctx) => {
+  const a = JSON.stringify(ctx, null, 2);
+
+  // save to file
+  const fs = require("fs/promises");
+  // override
+  await fs.writeFile("inline_query.json", a);
+
+  const result: InlineQueryResult[] = [
+    {
+      type: "article",
+      id: "1",
+      title: "Hello world",
+      thumbnail_url: "https://api.dicebear.com/8.x/micah/png?seed=123",
+      input_message_content: {
+        message_text: `
+@${ctx.inlineQuery.from.username} invites you to join 
+                    
+TIN TON 💎🐈‍⬛ THE BIGGEST GAMING COMMUNITY 👾
+                    
+🚨 Farming LAUNCH 🚨
+                    
+🚀 Play Game 🚀
+👨‍🎤 Join Clans 👩‍🎤
+🐈‍⬛ Invite Cats 🐈‍⬛
+
+💲 FARM $TINS 💲`,
+        link_preview_options: {
+          prefer_large_media: true,
+          prefer_small_media: false,
+          show_above_text: false,
+          url: "https://m3mefest.gall3ry.io/images/thumbnail.png",
+        },
+        entities: [
+          {
+            type: "bold",
+            offset: 0,
+            length: 3,
+          },
+        ],
+      } as InputTextMessageContent,
+      reply_markup: {
+        inline_keyboard: [
+          [
+            {
+              text: "Share",
+              switch_inline_query_chosen_chat: {
+                allow_bot_chats: true,
+                allow_channel_chats: true,
+                allow_group_chats: true,
+                allow_user_chats: true,
+                query: "play_game",
+              },
+            },
           ],
-        })
-      );
-
-      console.log(query);
-    }
-  });
-
-  client.addEventHandler(
-    async (event) => {
-      const { message } = event;
-      console.log(`Receiving message`, message.message);
-
-      const result: Api.messages.BotResults = await client.invoke(
-        new Api.messages.GetInlineBotResults({
-          bot: botUsername,
-          peer: message.peerId,
-          geoPoint: new Api.InputGeoPoint({
-            lat: 8.24,
-            long: 8.24,
-            accuracyRadius: 43,
-          }),
-          query: "random string here",
-          offset: "",
-        })
-      );
-
-      console.log(result);
-
-      // send inline bot result
-      //   await client.invoke(
-      //   new Api.messages.SendInlineBotResult({
-      //     // bot: botUsername,
-      //     queryId: result.queryId,
-      //     userId: message.peerId,
-      //     // id: result.results[0].id,
-      //   })
-      // );
-
-      Api.BotInlineMediaResult;
+        ],
+      },
     },
-    new NewMessage({
-      pattern: /^\/(hi)\s*(@?\w*|\d*)$/,
-    })
-  );
-  console.log(`eventAdded`);
-})();
+  ];
+  // Explicit usage
+  await ctx.telegram.answerInlineQuery(ctx.inlineQuery.id, result);
 
-// on exit
-process.on("exit", () => {
-  rl.close();
-  console.log("Exiting...");
-  if (client) {
-    client.disconnect();
-    console.log("Client disconnected");
-  }
+  // Using context shortcut
+  await ctx.answerInlineQuery(result);
 });
+
+bot.on("chosen_inline_result", async (ctx) => {
+  console.log(`Received chosen inline result,`, ctx.chosenInlineResult);
+});
+
+bot.launch();
+console.log("Bot is up and running");
+
+// Enable graceful stop
+process.once("SIGINT", () => bot.stop("SIGINT"));
+process.once("SIGTERM", () => bot.stop("SIGTERM"));
+
+if (import.meta.hot) {
+  import.meta.hot.on("vite:beforeFullReload", () => {
+    console.log("Reloading...");
+    bot?.stop();
+  });
+}

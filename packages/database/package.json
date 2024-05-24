@@ -12,10 +12,17 @@
     "db:generate": "prisma generate",
     "db:deploy": "prisma migrate deploy",
     "db:studio": "prisma studio",
-    "db:migrate": "prisma migrate dev"
+    "db:migrate": "prisma migrate dev",
+    "build": "tsup",
+    "dev": "tsup --watch"
   },
-  "main": "./index.ts",
-  "types": "./index.ts",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "main": "index.js",
+  "module": "index.mjs",
+  "types": "index.d.ts",
+  "type": "commonjs",
   "prisma": {
     "schema": "prisma/schema.prisma"
   }

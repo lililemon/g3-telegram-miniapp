@@ -1,25 +1,27 @@
+import fs from "fs/promises";
+import input from "input";
+import { groupBy } from "lodash-es";
 import { Telegraf } from "telegraf";
 import { InlineQueryResult, InputTextMessageContent } from "telegraf/types";
-import { TelegramClient, tl } from "telegram";
+import { Api, TelegramClient, tl } from "telegram";
 import { StringSession } from "telegram/sessions/index.js";
 import { COMMANDS, MAP_COMMAND_TO_DESCRIPTION } from "./commands";
 import { db } from "./utils/db";
 
 const apiId = 25258261;
 const apiHash = "ecdcb0e838175aee63d57acdbf9c76b0";
-const stringSession = new StringSession();
+const stringSession = new StringSession(
+  "1BQANOTEuMTA4LjU2LjE1MgG7N4/tCs0IrLXKOgw0XQzW94ofujRIgu/fqxLoKkCSgLv1p2SxdFBMbCgx5I+49OXOV/WIBhDIoNxG+LLkJ+7e0DFfesGQ2jxEkd//7q73CKQ4OgTtNSR2lgrJSbbptPzatkL28dL1c0wR+hN0qZxH8q7bRpYz9WeK17CxBn8N59yhADcjujHZ2nx6474auz5etcJqtOj1PlMdqBNRON4hkYQoIL9h4fcwq9IeCMU7vWRYQLmHX5C23DqvvMW4kVejcOrRUHuCzQgCQd5PYn5c2LVTBF99lIYKDU86ncE/SoB8d0yi4E7eGSGeceGvpyFNkQ+JwetITdWs64yMlTm/1w=="
+);
+const botToken = "7162609772:AAEM7x3Kfeta5CBesezv5gdD5youN6CsnBI";
 
 export class BotApp {
   private static instance: BotApp;
-  private static botToken = "6963110935:AAFAgq9J5qo7Z3TL5YOWAmt1PQhCmke1_3U";
-  private bot = new Telegraf(BotApp.botToken);
+  private bot = new Telegraf(botToken);
 
-  private telegramClient = new TelegramClient(
-    stringSession,
-    apiId,
-    apiHash,
-    {}
-  );
+  private telegramClient = new TelegramClient(stringSession, apiId, apiHash, {
+    connectionRetries: 5,
+  });
 
   private constructor() {}
 
@@ -65,33 +67,55 @@ export class BotApp {
       });
     });
     bot.command(COMMANDS.get_reaction, async (ctx) => {
-      // /get_reaction <group_id> <message_id>
-      const groupId = "testabc1234578";
-      const messageId = 50;
-      console.log(`im here`);
-      const channel = await this.telegramClient.invoke(
-        new tl.Api.contacts.ResolveUsername({ username: groupId })
-      );
+      console.log(`Getting reaction for message ${ctx.message?.message_id}`);
+      const groupName = "rust_vn";
+      const messageIds = [2375];
+      const channel = (await this.telegramClient.invoke(
+        new tl.Api.contacts.ResolveUsername({
+          username: groupName,
+        })
+      )) as tl.Api.contacts.ResolvedPeer;
 
-      console.log({
-        accessHash: (channel.peer as unknown as tl.Api.InputPeerChannel)
-          .accessHash,
-        channel: JSON.stringify(channel.peer, null, 2),
+      // save to file
+      const fileName = `./channels/${groupName}.json`;
+      // mkdir if not exists
+      await fs.mkdir("./channels", { recursive: true });
+      await fs.writeFile(fileName, JSON.stringify(channel, null, 2));
+
+      const { chats } = channel;
+      const chat = chats?.[0] as Api.Channel;
+      const accessHash = chat?.accessHash;
+      const channelId = chat.id;
+
+      if (!chat || !accessHash || !channelId) {
+        ctx.reply(`Channel ${groupName} not found`);
+        return;
+      }
+
+      // console.log(`Getting reactions for message ${messageIds}`);
+      const reactions = (await this.telegramClient.invoke(
+        new Api.messages.GetMessagesReactions({
+          id: messageIds,
+          peer: new Api.InputPeerChannel({
+            channelId: channelId,
+            accessHash: accessHash,
+          }),
+        })
+      )) as unknown as Api.Updates;
+
+      reactions.updates.forEach((update) => {
+        if (update instanceof Api.UpdateMessageReactions) {
+          console.log(groupBy(update.reactions.results, "reaction.emoticon"));
+        } else {
+          console.error("Unknown update", update);
+        }
       });
 
-      // const reactions = await this.telegramClient.invoke(
-      //   new tl.Api.messages.GetMessageReactionsList({
-      //     id: messageId,
-      //     peer: new tl.Api.InputPeerChannel({
-      //       accessHash,
-      //       channelId,
-      //     }),
-      //   })
-      // );
-
-      // console.log({
-      //   reactions,
-      // });
+      // // save to file
+      // const reactionsFileName = `./reactions/${messageId}.json`;
+      // // mkdir if not exists
+      // await fs.mkdir("./reactions", { recursive: true });
+      // await fs.writeFile(reactionsFileName, JSON.stringify(reactions, null, 2));
 
       // ctx.reply(
       //   `Reactions for message ${messageId}: ${reactions.users.length}`
@@ -166,6 +190,22 @@ export class BotApp {
 
     bot.on("message", async (ctx) => {
       console.log("message", ctx);
+
+      const { message } = ctx;
+
+      switch (true) {
+        case message.chat.type === "supergroup": {
+          console.log(`Received message in supergroup,`, message);
+
+          break;
+        }
+      }
+
+      // save to file
+      const fileName = `./messages/${ctx.message?.message_id}.json`;
+      // mkdir if not exists
+      await fs.mkdir("./messages", { recursive: true });
+      await fs.writeFile(fileName, JSON.stringify(ctx.message, null, 2));
     });
     bot.on("chosen_inline_result", async (ctx) => {
       console.log(`Received chosen inline result,`, ctx.chosenInlineResult);
@@ -173,9 +213,19 @@ export class BotApp {
   }
 
   private async _initializeClient() {
+    console.log(`🚀 Initializing Telegram client...`);
     await this.telegramClient.start({
-      botAuthToken: BotApp.botToken,
+      phoneNumber: async () => await input.text("Please enter your number: "),
+      password: async () => await input.text("Please enter your password: "),
+      phoneCode: async () =>
+        await input.text("Please enter the code you received: "),
+      onError: (err) => console.log(err),
     });
+
+    console.log(
+      `🚀 Telegram client is ready!`
+      // this.telegramClient.session.save()
+    );
   }
 
   public async launch() {

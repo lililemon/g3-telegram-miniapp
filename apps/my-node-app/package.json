@@ -8,12 +8,15 @@
     "dev": "tsup --watch --onSuccess \"node dist/app.js\""
   },
   "devDependencies": {
+    "@types/lodash-es": "^4.17.12",
     "tsup": "^8.0.2",
     "typescript": "^5.2.2"
   },
   "dependencies": {
     "@repo/typescript-config": "workspace:*",
     "database": "workspace:*",
+    "input": "^1.0.1",
+    "lodash-es": "^4.17.21",
     "telegraf": "^4.16.3",
     "telegram": "^2.21.2"
   }

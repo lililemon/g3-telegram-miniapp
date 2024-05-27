@@ -8,6 +8,9 @@ await import("./src/env.js");
 const config = {
   reactStrictMode: false,
   transpilePackages: ["@repo/utils"],
+  experimental: {
+    instrumentationHook: true,
+  },
 };
 
 export default config;

@@ -5,6 +5,7 @@ import "~/styles/globals.css";
 import { GeistSans } from "geist/font/sans";
 
 import Script from "next/script";
+import { Toaster } from "react-hot-toast";
 import { Providers } from "./_providers";
 
 export const metadata = {
@@ -23,6 +24,7 @@ export default function RootLayout({
       <body>
         <Script src="https://telegram.org/js/telegram-web-app.js"></Script>
         <Providers>
+          <Toaster />
           <Theme>{children}</Theme>
         </Providers>
       </body>

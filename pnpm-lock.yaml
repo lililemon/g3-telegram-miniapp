@@ -92,6 +92,12 @@ importers:
       react-dom:
         specifier: 18.2.0
         version: 18.2.0(react@18.2.0)
+      react-hot-toast:
+        specifier: ^2.4.1
+        version: 2.4.1(csstype@3.1.2)(react-dom@18.2.0)(react@18.2.0)
+      react-icons:
+        specifier: ^5.2.1
+        version: 5.2.1(react@18.2.0)
       server-only:
         specifier: ^0.0.1
         version: 0.0.1
@@ -171,6 +177,9 @@ importers:
       telegram:
         specifier: ^2.21.2
         version: 2.21.2
+      zod:
+        specifier: ^3.23.3
+        version: 3.23.8
     devDependencies:
       '@types/lodash-es':
         specifier: ^4.17.12
@@ -208,6 +217,9 @@ importers:
       database:
         specifier: workspace:*
         version: link:../../packages/database
+      input:
+        specifier: ^1.0.1
+        version: 1.0.1
       lodash-es:
         specifier: ^4.17.21
         version: 4.17.21
@@ -217,6 +229,9 @@ importers:
       rxjs:
         specifier: ^7.8.1
         version: 7.8.1
+      telegram:
+        specifier: ^2.21.2
+        version: 2.21.2
     devDependencies:
       '@nestjs/cli':
         specifier: ^10.0.0
@@ -7443,6 +7458,14 @@ packages:
       slash: 4.0.0
     dev: true
 
+  /goober@2.1.14(csstype@3.1.2):
+    resolution: {integrity: sha512-4UpC0NdGyAFqLNPnhCT2iHpza2q+RAY3GV85a/mRPdzyPQMsj0KmMMuetdIkzWRbJ+Hgau1EZztq8ImmiMGhsg==}
+    peerDependencies:
+      csstype: ^3.0.10
+    dependencies:
+      csstype: 3.1.2
+    dev: false
+
   /gopd@1.0.1:
     resolution: {integrity: sha512-d65bNlIadxvpb/A2abVdlqKqV563juRnZ1Wtk6s1sIR8uNsXR70xqIzVqxVf1eTqDunwT2MkczEeaezCKTZhwA==}
     dependencies:
@@ -9686,6 +9709,28 @@ packages:
       loose-envify: 1.4.0
       react: 18.2.0
       scheduler: 0.23.0
+    dev: false
+
+  /react-hot-toast@2.4.1(csstype@3.1.2)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-j8z+cQbWIM5LY37pR6uZR6D4LfseplqnuAO4co4u8917hBUvXlEqyP1ZzqVLcqoyUesZZv/ImreoCeHVDpE5pQ==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      react: '>=16'
+      react-dom: '>=16'
+    dependencies:
+      goober: 2.1.14(csstype@3.1.2)
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+    transitivePeerDependencies:
+      - csstype
+    dev: false
+
+  /react-icons@5.2.1(react@18.2.0):
+    resolution: {integrity: sha512-zdbW5GstTzXaVKvGSyTaBalt7HSfuK5ovrzlpyiWHAFXndXTdd/1hdDHI4xBM1Mn7YriT6aqESucFl9kEXzrdw==}
+    peerDependencies:
+      react: '*'
+    dependencies:
+      react: 18.2.0
     dev: false
 
   /react-is@16.13.1:

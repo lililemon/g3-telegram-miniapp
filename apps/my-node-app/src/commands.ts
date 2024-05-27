@@ -4,7 +4,6 @@ export enum COMMANDS {
   total_users = "total_users",
   share = "share",
   login = "login",
-  get_reaction = "get_reaction",
 }
 
 export const MAP_COMMAND_TO_DESCRIPTION: Record<COMMANDS, string> = {
@@ -13,5 +12,4 @@ export const MAP_COMMAND_TO_DESCRIPTION: Record<COMMANDS, string> = {
   total_users: "Total users",
   share: "Share",
   login: "Login",
-  get_reaction: "Get reaction by message ID",
 } as const;

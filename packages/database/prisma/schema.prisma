@@ -96,5 +96,11 @@ model Share {
     occ   Occ @relation(fields: [occId], references: [id])
     occId Int
 
-    metadata Json?
+    superGroupUsername String
+    messageId          String
+
+    metadata          Json?
+    reactionMetadata  Json?
+    reactionUpdatedAt DateTime?
+    reactionCount     Int?
 }

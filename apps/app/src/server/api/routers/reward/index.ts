@@ -1,4 +1,4 @@
-import { type RewardType } from "database";
+import { RewardType } from "database";
 import { z } from "zod";
 import { db } from "../../../db";
 import { createTRPCRouter, protectedProcedure } from "../../trpc";

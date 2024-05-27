@@ -4,20 +4,16 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite-node -w ./src/app.ts",
-    "build": "tsc"
+    "build": "tsup",
+    "dev": "tsup --watch --onSuccess \"node dist/app.js\""
   },
   "devDependencies": {
-    "@types/express": "^4.17.21",
-    "ts-node": "^10.9.1",
-    "ts-node-dev": "^2.0.0",
-    "typescript": "^5.2.2",
-    "vite": "^5.2.11",
-    "vite-node": "^1.6.0"
+    "tsup": "^8.0.2",
+    "typescript": "^5.2.2"
   },
   "dependencies": {
     "@repo/typescript-config": "workspace:*",
-    "express": "^4.19.2",
+    "database": "workspace:*",
     "telegraf": "^4.16.3",
     "telegram": "^2.21.2"
   }

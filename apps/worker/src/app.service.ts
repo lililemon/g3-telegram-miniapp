@@ -4,11 +4,6 @@ import { PrismaClient } from 'database';
 const db = new PrismaClient({
   log: ['query'],
   errorFormat: 'pretty',
-  datasources: {
-    db: {
-      url: process.env.DATABASE_URL,
-    },
-  },
 });
 
 @Injectable()

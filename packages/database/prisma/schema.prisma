@@ -13,6 +13,7 @@ model User {
     point      Int          @default(0)
     RewardLogs RewardLogs[]
     Provider   Provider[]
+    Occ        Occ[]
 }
 
 model OccTemplate {
@@ -23,6 +24,7 @@ model OccTemplate {
     name String
 
     Rewards Reward[]
+    Occ     Occ[]
 }
 
 enum RewardType {
@@ -69,11 +71,30 @@ model Provider {
     @@unique([type, value])
 }
 
-model SharingMessage {
+model Occ {
     id        Int      @id @default(autoincrement())
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    username  String
-    chat_type String
+    occTemplate   OccTemplate @relation(fields: [occTemplateId], references: [id])
+    occTemplateId Int
+
+    user   User @relation(fields: [userId], references: [id])
+    userId Int
+
+    shareCount Int     @default(0)
+    Share      Share[]
+
+    metadata Json?
+}
+
+model Share {
+    id        Int      @id @default(autoincrement())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    occ   Occ @relation(fields: [occId], references: [id])
+    occId Int
+
+    metadata Json?
 }

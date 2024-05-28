@@ -1,0 +1,28 @@
+# fly.toml app configuration file generated for telegram-miniapp on 2024-05-27T16:39:14+07:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'telegram-miniapp'
+primary_region = 'sin'
+
+[processes]
+bot = "pnpm --filter my-node-app run start"
+worker = "pnpm --filter my-node-app run start"
+
+[build]
+
+[env]
+PORT = '8080'
+
+[[vm]]
+memory = '1gb'
+cpu_kind = 'shared'
+cpus = 1
+processes = ['worker']
+
+[[vm]]
+memory = '1gb'
+cpu_kind = 'shared'
+cpus = 1
+processes = ['bot']

@@ -16,12 +16,18 @@ export class AppService {
     const instance = await TelegramService.getInstance();
 
     const shareList = await db.share.findMany({
-      where: { reactionUpdatedAt: null },
+      where: {
+        // LIVE TIME
+        // reactionUpdatedAt: { lte: new Date(Date.now() - 1000 * 60 * 60 * 24) }, // 24 hours
+      },
     });
 
     const groupedShare = groupBy(shareList, 'superGroupUsername');
 
     for (const [groupName, share] of Object.entries(groupedShare)) {
+      console.log(
+        `Processing group ${groupName}, share count: ${share.length}`,
+      );
       const reactions = await instance.getReactionsByIds({
         groupName: groupName,
         ids: share.map((s) => +s.messageId),
@@ -44,12 +50,16 @@ export class AppService {
 
         const [reactionMetadata] = reaction;
 
+        console.log(
+          `Updating share ${share.id} with reaction count ${reactionCount}`,
+        );
+
         await db.share.update({
           where: { id: share.id },
           data: {
-            reactionUpdatedAt: new Date(),
             reactionMetadata,
             reactionCount,
+            reactionUpdatedAt: new Date(),
           },
         });
       }

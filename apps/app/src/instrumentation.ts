@@ -11,7 +11,6 @@ export async function initializeMockOccEvent() {
   await db.occTemplate.upsert({
     where: {
       id,
-      name: "Mock OCC Event",
     },
     create: {
       id,

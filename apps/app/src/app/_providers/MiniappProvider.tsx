@@ -1,5 +1,5 @@
 "use client";
-import { MiniApp, initMiniApp } from "@tma.js/sdk-react";
+import { initMiniApp, type MiniApp } from "@tma.js/sdk-react";
 import { useEffect } from "react";
 import { create } from "zustand";
 

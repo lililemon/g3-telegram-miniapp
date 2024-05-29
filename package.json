@@ -6,11 +6,14 @@
     "dev": "dotenv -- turbo dev",
     "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "db:studio": "dotenv -- turbo db:studio"
+    "db:studio": "dotenv -- turbo db:studio",
+    "commit": "cz"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "commitizen": "^4.3.0",
+    "cz-emoji": "1.3.2-canary.2",
     "dotenv-cli": "^7.4.2",
     "prettier": "^3.2.5",
     "tsup": "^8.0.2",
@@ -19,5 +22,10 @@
   "packageManager": "pnpm@8.9.0",
   "engines": {
     "node": ">=18"
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-emoji"
+    }
   }
 }

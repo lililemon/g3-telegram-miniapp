@@ -1,6 +1,5 @@
 # Gall3ry Telegram Miniapp
 
-
 ## Run with filter
 
 ### App

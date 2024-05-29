@@ -1,21 +1,23 @@
 "use client";
 import { Button, Heading, Section, Table } from "@radix-ui/themes";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { parseAsInteger, useQueryState } from "nuqs";
+import toast from "react-hot-toast";
+import { FaTelegram } from "react-icons/fa6";
 import { api } from "../../../trpc/react";
+import { useMiniApp } from "../../_providers/MiniappProvider";
 
 export const MyOCC = () => {
   const [page, setPage] = useQueryState(
     "my-occ-page",
     parseAsInteger.withDefault(1),
   );
-  const router = useRouter();
   const LIMIT = 10;
   const { data } = api.occ.getMyOccs.useQuery({
     limit: LIMIT,
     page,
   });
+  const { miniApp } = useMiniApp();
 
   const summarizeReaction = (reactions: Record<string, number> | undefined) => {
     if (!reactions) {
@@ -49,17 +51,33 @@ export const MyOCC = () => {
               <Table.Cell align="right">
                 {summarizeReaction(occ.sumarizedReactions)}
               </Table.Cell>
+
               <Table.Cell align="right">
-                <Link href={`/occ/${occ.id}`}>
-                  <Button>View</Button>
-                </Link>
+                <Button asChild>
+                  <Link href={`/occ/${occ.id}`}>View</Link>
+                </Button>
 
                 <Button
                   ml="2"
+                  variant="outline"
                   onClick={() => {
-                    router.push(`/occ/${occ.id}`);
+                    try {
+                      miniApp?.switchInlineQuery(
+                        `${occ.occTemplateId}-${occ.id}`,
+                        ["channels", "users", "groups"],
+                      );
+                    } catch (error) {
+                      if (
+                        error instanceof Error &&
+                        error.message ===
+                          "Method is unsupported because Mini App should be launched in inline mode."
+                      ) {
+                        toast.error(error.message);
+                      }
+                    }
                   }}
                 >
+                  <FaTelegram />
                   Share
                 </Button>
               </Table.Cell>

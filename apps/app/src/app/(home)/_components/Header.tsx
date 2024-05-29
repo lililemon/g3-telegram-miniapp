@@ -1,8 +1,8 @@
 "use client";
-import { StarFilledIcon } from "@radix-ui/react-icons";
-import { Button, Flex } from "@radix-ui/themes";
+import { Button, Flex, Heading } from "@radix-ui/themes";
 import { formatNumber } from "@repo/utils";
 import { TonConnectButton } from "@tonconnect/ui-react";
+import Link from "next/link";
 import { api } from "../../../trpc/react";
 import { useIsAuthenticated } from "../../_providers/useAuth";
 
@@ -17,11 +17,14 @@ export const Header = () => {
 
   return (
     <>
-      <Flex justify="end" gap="2" align="center">
+      <Flex justify="between" gap="2" align="center">
+        <Link href="/">
+          <Heading color="gray">MiniApp</Heading>
+        </Link>
+
         {isSuccess && (
           <Button size="3" variant="solid" color="lime" loading={isPending}>
-            <StarFilledIcon />
-            <span>{formatNumber(data.point)}</span>
+            <span>{formatNumber(data.point)} pts</span>
           </Button>
         )}
 

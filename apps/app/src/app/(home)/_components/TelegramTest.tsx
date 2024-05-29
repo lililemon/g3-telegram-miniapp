@@ -1,11 +1,13 @@
 "use client";
 import { Button, Code, Heading } from "@radix-ui/themes";
-import { useInitData, useMiniApp } from "@tma.js/sdk-react";
+import { useInitData } from "@tma.js/sdk-react";
+import { useMiniApp } from "../../_providers/MiniappProvider";
 
 export const TelegramTest = () => {
   const initData = useInitData();
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { switchInlineQuery, isBotInline } = useMiniApp();
+  const { miniApp } = useMiniApp();
+  const isBotInline = miniApp?.isBotInline;
 
   return (
     <>
@@ -17,7 +19,8 @@ export const TelegramTest = () => {
 
       <Button
         onClick={() => {
-          switchInlineQuery("hello_tin", ["groups", "users"]);
+          // switchInlineQuery("hello_tin", ["groups", "users"]);
+          miniApp?.switchInlineQuery("hello_tin", ["groups", "users"]);
         }}
       >
         Click me to share

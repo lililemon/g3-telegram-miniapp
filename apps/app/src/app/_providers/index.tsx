@@ -4,6 +4,7 @@ import { SDKProvider } from "@tma.js/sdk-react";
 import { TonConnectUIProvider } from "@tonconnect/ui-react";
 import { TRPCReactProvider } from "../../trpc/react";
 import { BackendAuthProvider } from "./BackendAuthProvider";
+import { MiniappProvider } from "./MiniappProvider";
 
 // Manifest URL must be https with a public domain
 const MANIFEST_URL =
@@ -18,9 +19,11 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
         //   twaReturnUrl: "https://t.me/g3stgbot",
         // }}
       >
-        <SDKProvider acceptCustomStyles debug>
-          <BackendAuthProvider>{children}</BackendAuthProvider>
-        </SDKProvider>
+        <MiniappProvider>
+          <SDKProvider acceptCustomStyles debug>
+            <BackendAuthProvider>{children}</BackendAuthProvider>
+          </SDKProvider>
+        </MiniappProvider>
       </TonConnectUIProvider>
     </TRPCReactProvider>
   );

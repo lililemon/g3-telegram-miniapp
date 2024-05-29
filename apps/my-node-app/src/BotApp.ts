@@ -4,6 +4,7 @@ import { InlineQueryResult, InputTextMessageContent } from "telegraf/types";
 import { z } from "zod";
 import { PersistentDb } from "./PersistentDb";
 import { COMMANDS, MAP_COMMAND_TO_DESCRIPTION } from "./commands";
+import { isChatTypeSupported } from "./constants";
 import { env } from "./env";
 import { db } from "./utils/db";
 
@@ -34,25 +35,6 @@ export class BotApp {
     );
     bot.command(COMMANDS.start, async (ctx) => {
       await ctx.reply(`Hello @${ctx.from?.username}!`);
-    });
-    bot.command(COMMANDS.greetings, (ctx) => ctx.reply("Hello!!!"));
-    bot.command(COMMANDS.total_users, async (ctx) => {
-      const totalUsers = await db.provider.count();
-      await ctx.reply(`Total users: ${totalUsers}`);
-    });
-    bot.command(COMMANDS.share, async (ctx) => {
-      await ctx.reply("Share this bot with your friends! 🚀", {
-        reply_markup: {
-          inline_keyboard: [
-            [
-              {
-                text: "Share",
-                switch_inline_query: "play_game",
-              },
-            ],
-          ],
-        },
-      });
     });
   }
 
@@ -88,15 +70,15 @@ export class BotApp {
           db.occ.findUniqueOrThrow({
             where: { id: +occId },
           }),
-        ]);
-
-        console.log(`Received inline query`, ctx.inlineQuery);
+        ]).catch(() => {
+          throw new Error(`[MY NODE APP] OCC template or OCC not found`);
+        });
 
         const result: InlineQueryResult[] = [
           {
             type: "article",
-            id: "1",
-            title: `Join OCC ${occTemplate.name}`,
+            id: `${occEventId}-${occId}`,
+            title: `OCC event ${occTemplate.name}`,
             thumbnail_url:
               "https://www.gall3ry.io/assets/landing/union/gall3ry-logo-squared.png",
             description: `Join OCC ${occTemplate.name}`,
@@ -125,23 +107,37 @@ export class BotApp {
           },
         ];
 
-        // Explicit usage
-        await ctx.telegram.answerInlineQuery(ctx.inlineQuery.id, result);
-
         if (!ctx.inlineQuery.from.username || !ctx.inlineQuery.chat_type) {
           // Do nothing
           return;
         }
 
-        // Using context shortcut
-        await ctx.answerInlineQuery(result);
+        if (!isChatTypeSupported(ctx.inlineQuery.chat_type)) {
+          // Do nothing
+          console.log(
+            `Not supported chat type: ${ctx.inlineQuery.chat_type}, ${ctx.inlineQuery.from.username}`
+          );
+
+          //  TODO: send that we are not support
+
+          return;
+        }
+
+        // update user data
+        const storage = PersistentDb.getInstance();
+        storage.appendUserData(ctx.inlineQuery.from.id, {
+          occEventId: +occEventId,
+          occId: +occId,
+          chatType: ctx.inlineQuery.chat_type,
+        });
+
+        // Explicit usage
+        await ctx.telegram.answerInlineQuery(ctx.inlineQuery.id, result);
       } catch (error) {
         console.error(error);
       }
     });
     bot.on("chosen_inline_result", async (ctx) => {
-      console.log(`Received chosen inline result,`, ctx.chosenInlineResult);
-
       const [occEventId, occId] =
         new RegExp(/(\d+)-(\d+)/)
           .exec(ctx.chosenInlineResult.query)
@@ -158,12 +154,30 @@ export class BotApp {
         db.occ.findUniqueOrThrow({
           where: { id: +occId },
         }),
-      ]);
+      ]).catch(() => {
+        throw new Error(`[MY NODE APP] OCC template or OCC not found`);
+      });
 
       const storage = PersistentDb.getInstance();
+
+      const { chatType } = storage.getUserData(ctx.chosenInlineResult.from.id);
+      if (!isChatTypeSupported(chatType)) {
+        return;
+      }
+
       storage.appendUserData(ctx.chosenInlineResult.from.id, {
         occEventId: +occEventId,
         occId: +occId,
+      });
+
+      // increase share
+      await db.occ.update({
+        where: { id: +occId },
+        data: {
+          shareCount: {
+            increment: 1,
+          },
+        },
       });
     });
     bot.on("message", async (ctx) => {
@@ -177,7 +191,6 @@ export class BotApp {
           // get from db
           const storage = PersistentDb.getInstance();
           const userData = storage.getUserData(message.from.id);
-          console.log(`User data`, userData);
 
           const { occEventId, occId } = userData;
 
@@ -192,7 +205,9 @@ export class BotApp {
             db.occ.findUniqueOrThrow({
               where: { id: occId },
             }),
-          ]);
+          ]).catch(() => {
+            throw new Error(`[MY NODE APP] OCC template or OCC not found`);
+          });
 
           // remove from storage
           storage.appendUserData(message.from.id, {

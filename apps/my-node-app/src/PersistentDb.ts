@@ -1,8 +1,11 @@
+import { Chat } from "telegraf/types";
+
 type UserId = number;
 
 type Data = {
   occEventId?: number;
   occId?: number;
+  chatType?: "sender" | Chat["type"];
 };
 
 export class PersistentDb {

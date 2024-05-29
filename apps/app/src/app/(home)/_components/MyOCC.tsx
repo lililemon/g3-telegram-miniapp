@@ -37,6 +37,7 @@ export const MyOCC = () => {
           <Table.Row>
             <Table.ColumnHeaderCell>OCC ID</Table.ColumnHeaderCell>
             <Table.ColumnHeaderCell>Share Count</Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell>Partner share</Table.ColumnHeaderCell>
             <Table.ColumnHeaderCell align="right">
               Reactions
             </Table.ColumnHeaderCell>
@@ -47,6 +48,7 @@ export const MyOCC = () => {
           {data?.occs.map((occ) => (
             <Table.Row key={occ.id}>
               <Table.Cell>{occ.id}</Table.Cell>
+              <Table.ColumnHeaderCell>{occ.shareCount}</Table.ColumnHeaderCell>
               <Table.Cell>{occ._count.Share}</Table.Cell>
               <Table.Cell align="right">
                 {summarizeReaction(occ.sumarizedReactions)}

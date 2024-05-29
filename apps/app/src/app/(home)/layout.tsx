@@ -5,7 +5,6 @@ import {
   parseInitData,
   retrieveLaunchParams,
 } from "@tma.js/sdk-react";
-import eruda from "eruda";
 import { useEffect } from "react";
 import { env } from "../../env";
 import { Header } from "./_components/Header";
@@ -71,7 +70,7 @@ export default function RootLayout({
       typeof window !== "undefined" &&
       env.NEXT_PUBLIC_G3_ENV !== "production"
     ) {
-      eruda.init();
+      void import("eruda").then(({ default: eruda }) => eruda.init());
     }
   }, []);
 

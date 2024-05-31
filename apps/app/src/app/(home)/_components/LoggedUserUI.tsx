@@ -1,7 +1,7 @@
 "use client";
 import { Text } from "@radix-ui/themes";
 import { useIsAuthenticated } from "../../_providers/useAuth";
-import { MintOCC } from "./MintOcc";
+import { MintOCC } from "./MintOCC";
 import { Top } from "./Top";
 
 export function LoggedUserUI() {

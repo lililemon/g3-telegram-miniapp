@@ -27,7 +27,7 @@ export const env = createEnv({
       .string()
       .url()
       .regex(/t.me\/.+/)
-      .default("https://t.me/g3stg1bot/test55"),
+      .default("https://t.me/g3stg1bot/test"),
     NEXT_PUBLIC_TWA_MANIFEST_URL: z
       .string()
       .url()

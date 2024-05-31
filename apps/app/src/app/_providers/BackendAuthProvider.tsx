@@ -32,7 +32,6 @@ export const BackendAuthProvider = ({
       "recreateProofPayload",
       {
         isHydrated,
-        tonConnectUI,
       },
     ],
     queryFn: async () => {
@@ -55,7 +54,7 @@ export const BackendAuthProvider = ({
 
       return data;
     },
-    enabled: isHydrated && !!tonConnectUI,
+    enabled: isHydrated,
     refetchInterval: payloadTTLMS,
   });
 

@@ -1,5 +1,5 @@
 import { CHAIN } from "@tonconnect/protocol";
-import { Address, OpenedContract, toNano } from "ton-core";
+import { Address, toNano } from "ton-core";
 import NftCollection from "../contracts/NftCollection";
 import { setItemContentCell } from "../contracts/nftContent/onChain";
 import { useAsyncInitialize } from "./useAsyncInitialize";
@@ -27,7 +27,7 @@ export function useNftContract() {
           : "EQDzkXSigq_FQzQ6VYU-e84VgyRLk5avV2NxRiA5INjyepBe",
       ),
     );
-    return client.open(contract) as OpenedContract<NftCollection>;
+    return client.open(contract);
   }, [client]);
 
   return {

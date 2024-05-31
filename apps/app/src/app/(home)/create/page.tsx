@@ -1,4 +1,5 @@
 import { Button } from "@radix-ui/themes";
+import { Suspense } from "react";
 import { MyOCC } from "../_components/MyOCC";
 import { EpicItem } from "./EpicItem";
 
@@ -15,7 +16,9 @@ const Page = () => {
       <div className="mt-4">
         <EpicItem />
 
-        <MyOCC />
+        <Suspense>
+          <MyOCC />
+        </Suspense>
       </div>
     </div>
   );

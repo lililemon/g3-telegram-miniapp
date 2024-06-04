@@ -2,7 +2,7 @@ import { z } from "zod";
 import { db } from "../../../db";
 import PostHogClient from "../../services/posthog";
 import { createTRPCRouter, protectedProcedure } from "../../trpc";
-import { type QuestId } from "../quests/services/BaseQuest";
+import { type QuestId } from "../quests/services/QuestId";
 
 export class RewardService {
   private static instance: RewardService;

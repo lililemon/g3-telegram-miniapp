@@ -1,10 +1,6 @@
 import { TRPCError } from "@trpc/server";
 import { RewardService } from "../../reward";
-
-export enum QuestId {
-  JOIN_COMMUNITY = "JOIN_COMMUNITY",
-  BIND_WALLET_ADDRESS = "BIND_WALLET_ADDRESS",
-}
+import { type QuestId } from "./QuestId";
 
 export interface IQuest {
   readonly id: QuestId;
@@ -27,7 +23,11 @@ export interface IQuest {
    */
   isUserFinishedQuest({ userId }: { userId: number }): Promise<boolean>;
   isRewardAlreadyGiven({ userId }: { userId: number }): Promise<boolean>;
-  getQuestMetadata(): Promise<Record<string, unknown>>;
+  getQuestMetadata({
+    userId,
+  }: {
+    userId: number;
+  }): Promise<Record<string, unknown>>;
 }
 
 export abstract class BaseQuest implements IQuest {
@@ -74,5 +74,9 @@ export abstract class BaseQuest implements IQuest {
   }: {
     userId: number;
   }): Promise<boolean>;
-  abstract getQuestMetadata(): Promise<Record<string, unknown>>;
+  abstract getQuestMetadata({
+    userId,
+  }: {
+    userId: number;
+  }): Promise<Record<string, unknown>>;
 }

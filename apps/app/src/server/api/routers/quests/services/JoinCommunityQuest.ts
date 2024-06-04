@@ -2,13 +2,13 @@ import { TelegramService } from "@repo/telegram";
 import { TRPCError } from "@trpc/server";
 import { env } from "../../../../../env";
 import { db } from "../../../../db";
-import { BaseQuest, QuestId } from "./BaseQuest";
+import { BaseQuest } from "./BaseQuest";
+import { QuestId } from "./QuestId";
 
 const telegramInstance = new TelegramService(env.BOT_TOKEN);
 
 export class JoinCommunityTask extends BaseQuest {
   id = QuestId.JOIN_COMMUNITY;
-  COMMUNITY_CHAT_ID = -1002165075031;
   points = 200;
   title = "Join community";
   description = "Join the community to earn points";
@@ -61,7 +61,7 @@ export class JoinCommunityTask extends BaseQuest {
 
   async getQuestMetadata(): Promise<Record<string, unknown>> {
     return {
-      chatId: this.COMMUNITY_CHAT_ID,
+      chatId: env.NEXT_PUBLIC_COMMUNITY_CHAT_ID,
     };
   }
 }

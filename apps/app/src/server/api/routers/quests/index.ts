@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../../trpc";
-import { QuestId } from "./services/BaseQuest";
+import { QuestId } from "./services/QuestId";
 import { QuestService } from "./services/QuestService";
 import { QuestStatus } from "./services/QuestStatus";
 

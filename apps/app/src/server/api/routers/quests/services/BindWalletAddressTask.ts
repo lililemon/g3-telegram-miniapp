@@ -1,5 +1,6 @@
 import { db } from "../../../../db";
-import { BaseQuest, QuestId } from "./BaseQuest";
+import { BaseQuest } from "./BaseQuest";
+import { QuestId } from "./QuestId";
 
 export class BindWalletAddressTask extends BaseQuest {
   id = QuestId.BIND_WALLET_ADDRESS;

@@ -1,8 +1,9 @@
 import { TRPCError } from "@trpc/server";
 import PostHogClient, { Flag } from "../../../services/posthog";
-import { type IQuest, type QuestId } from "./BaseQuest";
+import { type IQuest } from "./BaseQuest";
 import { BindWalletAddressTask } from "./BindWalletAddressTask";
 import { JoinCommunityTask } from "./JoinCommunityQuest";
+import { type QuestId } from "./QuestId";
 import { QuestStatus } from "./QuestStatus";
 
 export class QuestService {
@@ -56,18 +57,22 @@ export class QuestService {
 
     return Promise.all(
       _getTaskWithFilter(taskType).map(async (task) => {
-        const isClaimable = await task
-          .isQuestCompleted({ userId })
-          .catch(() => false);
+        const [isClaimed, isFinishedQuest] = await Promise.all([
+          task.isRewardAlreadyGiven({ userId }).catch(() => false),
+          task.isUserFinishedQuest({ userId }).catch(() => false),
+        ]);
 
         return {
           id: task.id,
           points: task.points,
-          metadata: await task.getQuestMetadata(),
+          metadata: await task.getQuestMetadata({
+            userId,
+          }),
           title: task.title,
           description: task.description,
           text: task.text,
-          isClaimable,
+          isClaimed,
+          isFinishedQuest,
         };
       }),
     );

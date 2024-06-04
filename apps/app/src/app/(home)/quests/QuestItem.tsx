@@ -11,6 +11,7 @@ type QuestItemProps = {
   text?: string;
   isClaimable?: boolean;
   onClick?: () => void;
+  disabled?: boolean;
 };
 
 export const QuestItem = ({
@@ -20,6 +21,7 @@ export const QuestItem = ({
   title,
   isClaimable,
   onClick,
+  disabled,
 }: QuestItemProps) => {
   const _text = useMemo(() => {
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
@@ -56,7 +58,7 @@ export const QuestItem = ({
           </span>
         </div>
 
-        <Button size="2" onClick={onClick} disabled={!isClaimable}>
+        <Button size="2" onClick={onClick} disabled={disabled}>
           {_text}
         </Button>
       </div>

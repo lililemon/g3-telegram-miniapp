@@ -8,7 +8,7 @@ import { IconTime } from "./IconTime";
 export const CurrentPoint = () => {
   return (
     <div
-      className="relative rounded-xl bg-red-400 px-4 pb-[22px] pt-4"
+      className="relative rounded-xl px-4 pb-[22px] pt-4"
       style={{
         backgroundImage: `url(${IMAGES.balance_bg})`,
         backgroundSize: "cover",

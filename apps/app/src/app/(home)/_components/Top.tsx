@@ -25,6 +25,7 @@ export const Top = () => {
               src={IMAGES["top-bg"]}
               alt="top-bg"
               fill
+              objectFit="contain"
               className="aspect-[416/467] py-6"
             />
           </div>

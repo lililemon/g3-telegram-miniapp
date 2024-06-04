@@ -71,19 +71,20 @@ export class AppService {
               createMany: {
                 data: await Promise.all(
                   reaction
-                    .map(({ reactions, msgId }) => {
+                    .map(({ reactions }) => {
                       return Object.entries(reactions).map(
                         async ([_, { count, reaction }]) => {
                           const emoticon: string = (reaction as any)?.emoticon;
+                          const getEmojiDataFromNative =
+                            EmojiService.getInstance().getEmojiDataFromNative;
+                          const unifiedCode =
+                            (await getEmojiDataFromNative(emoticon))?.unified ??
+                            (await getEmojiDataFromNative(`❌`))?.unified;
 
                           return {
                             reactionType: emoticon,
                             count,
-                            unifiedCode: (
-                              await EmojiService.getInstance().getEmojiDataFromNative(
-                                emoticon,
-                              )
-                            ).unified,
+                            unifiedCode,
                           };
                         },
                       );

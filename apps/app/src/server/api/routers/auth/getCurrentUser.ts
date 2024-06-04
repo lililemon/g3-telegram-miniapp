@@ -8,9 +8,17 @@ class GetCurrentUserService {
     point: true,
     displayName: true,
     avatarUrl: true,
+    telegramId: true,
     _count: {
       select: {
         Occ: true,
+      },
+    },
+    Provider: {
+      select: {
+        id: true,
+        type: true,
+        value: true,
       },
     },
   } satisfies Prisma.UserSelect;

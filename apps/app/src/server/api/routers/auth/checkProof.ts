@@ -5,8 +5,8 @@ import { TonApiService } from "../../../_services/ton-api-service";
 import { TonProofService } from "../../../_services/ton-proof-service";
 import { createAuthToken, verifyToken } from "../../../_utils/jwt";
 import { db } from "../../../db";
+import PostHogClient from "../../services/posthog";
 import { publicProcedure } from "../../trpc";
-import { RewardService } from "../reward";
 
 class CheckProofService {
   static async checkProofOrThrow({
@@ -54,6 +54,12 @@ class CheckProofService {
     address: string;
     network: z.infer<typeof CheckProofRequest>["network"];
   }) {
+    const exist = await db.provider.findFirst({
+      where: { value: address, type: "TON_WALLET" },
+    });
+
+    const client = PostHogClient();
+
     const provider = await db.provider.upsert({
       where: {
         type_value: {
@@ -82,10 +88,28 @@ class CheckProofService {
       });
     }
 
-    const rewardService = RewardService.getInstance();
-    await rewardService.rewardForBindWalletAddress({
-      userId: user.id,
-    });
+    if (!exist) {
+      client.capture({
+        distinctId: user.id.toString(),
+        event: "new_user",
+        properties: {
+          address: address,
+          network: network,
+          type: "TON_WALLET",
+        },
+      });
+    } else {
+      client.capture({
+        distinctId: user.id.toString(),
+        event: "returning_user",
+        properties: {
+          address: address,
+          network: network,
+          type: "TON_WALLET",
+        },
+      });
+    }
+    await client.shutdown();
 
     const token = await createAuthToken({
       address: address,

@@ -6,19 +6,17 @@ import Link from "next/link";
 import { parseAsInteger, useQueryState } from "nuqs";
 import { FaTelegram } from "react-icons/fa6";
 import { api } from "../../../trpc/react";
-import { useMiniApp } from "../../_providers/MiniappProvider";
 
 export const MyOCC = () => {
   const [page, setPage] = useQueryState(
     "my-occ-page",
     parseAsInteger.withDefault(1),
   );
-  const LIMIT = 10;
+  const LIMIT = 1000;
   const { data } = api.occ.getMyOccs.useQuery({
     limit: LIMIT,
     page,
   });
-  const { miniApp } = useMiniApp();
 
   const summarizeReaction = (reactions: Record<string, number> | undefined) => {
     if (!reactions) {

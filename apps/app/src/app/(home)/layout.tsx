@@ -7,7 +7,6 @@ import {
 } from "@tma.js/sdk-react";
 import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
-import { env } from "../../env";
 import { Footer } from "./_components/Footer";
 import { Header } from "./_components/Header";
 
@@ -18,7 +17,7 @@ const BackButton = dynamic(
   },
 );
 
-if (typeof window !== "undefined" && env.NEXT_PUBLIC_G3_ENV === "development") {
+if (typeof window !== "undefined") {
   try {
     retrieveLaunchParams();
   } catch {

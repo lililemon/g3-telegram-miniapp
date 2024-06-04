@@ -10,8 +10,8 @@ import { EmojiService } from './services/emoji.js';
 export class AppService {
   private readonly logger = new Logger(AppService.name);
 
-  // TODO: Make it run once per day
-  @Cron('*/10 * * * * *')
+  // 2 minutes for testing
+  @Cron('0 */2 * * * *')
   async updateEmotion() {
     this.logger.debug('Called every 30 seconds');
     const instance = await TelegramService.getInstance();
@@ -20,6 +20,9 @@ export class AppService {
       where: {
         // LIVE TIME
         // reactionUpdatedAt: { lte: new Date(Date.now() - 1000 * 60 * 60 * 24) }, // 24 hours
+      },
+      orderBy: {
+        id: 'desc',
       },
     });
 
@@ -96,6 +99,9 @@ export class AppService {
           },
         });
       }
+
+      // avoid rate limit
+      await new Promise((resolve) => setTimeout(resolve, 500));
     }
   }
 

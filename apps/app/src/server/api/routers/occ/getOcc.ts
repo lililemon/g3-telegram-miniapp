@@ -20,6 +20,18 @@ export const getOcc = publicProcedure
       },
     });
 
+    const reactions = await db.reaction.groupBy({
+      by: ["unifiedCode"],
+      where: {
+        share: {
+          occId: id,
+        },
+      },
+      _count: {
+        count: true,
+      },
+    });
+
     const result = await db.occ.findUniqueOrThrow({
       where: { id },
       include: {
@@ -30,6 +42,7 @@ export const getOcc = publicProcedure
             displayName: true,
           },
         },
+
         _count: {
           select: {
             Share: true,
@@ -41,5 +54,6 @@ export const getOcc = publicProcedure
     return {
       ...result,
       totalReaction: totalReaction._sum.count ?? 0,
+      reactions,
     };
   });

@@ -2,29 +2,40 @@
 import { Avatar, Button, IconButton, Skeleton } from "@radix-ui/themes";
 import { formatTonAddress } from "@repo/utils";
 import { toUserFriendlyAddress } from "@tonconnect/sdk";
+import { memo, useState } from "react";
+import { api } from "../../../trpc/react";
+import { Drawer, DrawerContent, DrawerFooter } from "../_components/Drawer";
 import { LoggedUserOnly } from "../_components/LoggedUserOnly";
 import { useUser } from "../useUser";
 import { IconMore } from "./IconMore";
+import { IconSignOut } from "./IconSignOut";
+import { ProfileDrawer } from "./ProfileDrawer";
+import { useEditQueryState } from "./useEditQueryState";
 import { useLogout } from "./useLogout";
 
 const Page = () => {
   const { logout } = useLogout();
   const { data: user, tonProvider } = useUser();
+  const { data: stats, isSuccess } = api.auth.getMyStats.useQuery();
+  const { setEditProfileOpen } = useEditQueryState();
+  const [signOutDrawerOpen, setSignOutDrawerOpen] = useState(false);
 
-  const items = [
-    {
-      title: "Shares",
-      value: 40,
-    },
-    {
-      title: "Reactions",
-      value: 20,
-    },
-    {
-      title: "Minted",
-      value: 10,
-    },
-  ];
+  const items = isSuccess
+    ? [
+        {
+          title: "Shares",
+          value: Intl.NumberFormat().format(stats.totalShare),
+        },
+        {
+          title: "Reactions",
+          value: Intl.NumberFormat().format(stats.totalReaction),
+        },
+        {
+          title: "Minted",
+          value: Intl.NumberFormat().format(stats.totalMinted),
+        },
+      ]
+    : [];
 
   return (
     <>
@@ -53,7 +64,13 @@ const Page = () => {
           </div>
         </div>
 
-        <IconButton className="size-8" variant="ghost">
+        <IconButton
+          className="size-8"
+          variant="ghost"
+          onClick={() => {
+            void setEditProfileOpen(true);
+          }}
+        >
           <IconMore />
         </IconButton>
       </div>
@@ -83,14 +100,88 @@ const Page = () => {
 
       <div className="flex-1"></div>
 
+      <ProfileDrawer />
+
+      <SignOutDrawer
+        open={signOutDrawerOpen}
+        onOpenChange={setSignOutDrawerOpen}
+      />
+
       <div className="mt-4">
-        <Button color="red" onClick={logout} className="w-full" size="4">
-          Logout
+        <Button
+          onClick={() => {
+            setSignOutDrawerOpen(true);
+          }}
+          className="w-full bg-[#DAF200]"
+          size="4"
+        >
+          <div className="text-xl font-bold leading-7 text-slate-900">
+            Sign out
+          </div>
+          <div className="size-5">
+            <IconSignOut />
+          </div>
         </Button>
       </div>
     </>
   );
 };
+
+const SignOutDrawer = memo(
+  ({
+    open,
+    onOpenChange,
+  }: {
+    open: boolean;
+    onOpenChange: (open: boolean) => void;
+  }) => {
+    const { logout } = useLogout();
+
+    return (
+      <Drawer open={open} onOpenChange={onOpenChange}>
+        <DrawerContent>
+          <div className="text-center text-2xl font-bold leading-9 text-slate-900">
+            You are about to sign out
+          </div>
+
+          <DrawerFooter>
+            <Button
+              radius="full"
+              size="4"
+              onClick={() => {
+                void logout();
+              }}
+            >
+              <div className="text-xl font-bold leading-7 text-slate-900">
+                Sign out
+              </div>
+
+              <div className="size-6">
+                <IconSignOut />
+              </div>
+            </Button>
+
+            <Button
+              radius="full"
+              color="gray"
+              variant="soft"
+              size="4"
+              onClick={() => {
+                onOpenChange(false);
+              }}
+            >
+              <div className="text-xl font-bold leading-7 text-slate-900">
+                Cancel
+              </div>
+            </Button>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
+    );
+  },
+);
+
+SignOutDrawer.displayName = "SignOutDrawer";
 
 const PageWrapper = () => {
   return (

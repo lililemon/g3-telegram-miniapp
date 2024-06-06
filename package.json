@@ -10,17 +10,19 @@
     "db:migrate": "dotenv -- turbo db:migrate",
     "db:migrate:reset": "dotenv -- turbo db:migrate:reset",
     "commit": "cz",
-    "turbo": "dotenv -- turbo run"
+    "turbo": "dotenv -- turbo run",
+    "prepare": "husky"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "commitizen": "^4.3.0",
     "dotenv-cli": "^7.4.2",
+    "git-cz": "^4.9.0",
+    "husky": "^9.0.11",
     "prettier": "^3.2.5",
     "tsup": "^8.0.2",
-    "turbo": "latest",
-    "git-cz": "^4.9.0"
+    "turbo": "latest"
   },
   "packageManager": "pnpm@8.9.0",
   "engines": {

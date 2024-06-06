@@ -42,7 +42,6 @@ export const BackendAuthProvider = ({
 
       const _data = {
         displayName: initData.user.username,
-        avatarUrl: initData.user.photoUrl,
         telegramId: initData.user.id,
       } satisfies RouterInputs["auth"]["updateDisplayName"] as RouterInputs["auth"]["updateDisplayName"];
 

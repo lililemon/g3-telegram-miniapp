@@ -8,10 +8,7 @@ import { FaTelegram } from "react-icons/fa6";
 import { api } from "../../../trpc/react";
 
 export const MyOCC = () => {
-  const [page, setPage] = useQueryState(
-    "my-occ-page",
-    parseAsInteger.withDefault(1),
-  );
+  const [page] = useQueryState("my-occ-page", parseAsInteger.withDefault(1));
   const LIMIT = 1000;
   const { data } = api.occ.getMyOccs.useQuery({
     limit: LIMIT,

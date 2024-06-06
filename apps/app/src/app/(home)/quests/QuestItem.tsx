@@ -62,7 +62,7 @@ export const QuestItem = ({
 
       return text;
     }
-  }, [isCompleted]);
+  }, [disabled, isClaimable, isCompleted, onClick, text]);
 
   return (
     <Link

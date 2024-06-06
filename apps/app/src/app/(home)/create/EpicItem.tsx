@@ -29,7 +29,7 @@ export const EpicItem = ({
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         className="h-[100px] w-[100px] rounded-lg"
-        src="https://via.placeholder.com/100x100"
+        src="https://fastly.picsum.photos/id/947/200/200.jpg?hmac=Nso8kNr17S_Y5Rr6XXnifQUmzulyyA29wQXwgsJmb8A"
         alt="epic"
       />
 

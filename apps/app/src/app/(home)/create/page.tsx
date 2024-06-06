@@ -79,6 +79,13 @@ const EpicItems = () => {
             occMinted={item._count.Occ}
             hasYouMinted={false}
             href={`/templates/${item.id}`}
+            participants={item.Occ.map((occ) => {
+              return {
+                id: occ.Provider.User.id,
+                name: occ.Provider.User.displayName ?? "?",
+                avatar: occ.Provider.User.avatarUrl ?? null,
+              };
+            })}
           />
         ))}
     </Spinner>

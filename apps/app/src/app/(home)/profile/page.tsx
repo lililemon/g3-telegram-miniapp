@@ -14,7 +14,6 @@ import { useEditQueryState } from "./useEditQueryState";
 import { useLogout } from "./useLogout";
 
 const Page = () => {
-  const { logout } = useLogout();
   const { data: user, tonProvider } = useUser();
   const { data: stats, isSuccess } = api.auth.getMyStats.useQuery();
   const { setEditProfileOpen } = useEditQueryState();

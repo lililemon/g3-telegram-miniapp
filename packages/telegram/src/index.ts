@@ -29,4 +29,24 @@ export class TelegramService {
         return false;
       });
   }
+
+  async getUserProfilePhoto({
+    telegramUserId,
+  }: {
+    telegramUserId: number;
+  }): Promise<string> {
+    return this.telegrafInstance.telegram
+      .getUserProfilePhotos(telegramUserId)
+      .then(async (photos) => {
+        if (photos.total_count === 0) {
+          throw new Error("User has no profile photos");
+        }
+
+        const fileLink = await this.telegrafInstance.telegram.getFileLink(
+          photos.photos[0]![0]!.file_id
+        );
+
+        return fileLink.toString();
+      });
+  }
 }

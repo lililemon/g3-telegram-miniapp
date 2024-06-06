@@ -3,20 +3,17 @@ import { z } from "zod";
 import { db } from "../../../db";
 import { capture } from "../../services/posthog";
 import { protectedProcedure } from "../../trpc";
+import { telegramInstance } from "../quests/services/telegramInstance";
 
 export const updateDisplayName = protectedProcedure
   .input(
     z.object({
       displayName: z.string().min(5).max(50).trim().optional(),
       telegramId: z.number().optional(),
-      avatarUrl: z.string().url().optional(),
     }),
   )
   .mutation(
-    async ({
-      ctx: { session },
-      input: { telegramId, displayName, avatarUrl },
-    }) => {
+    async ({ ctx: { session }, input: { telegramId, displayName } }) => {
       const userId = session.userId;
 
       void capture({
@@ -26,6 +23,14 @@ export const updateDisplayName = protectedProcedure
           displayName: displayName,
         },
       });
+
+      let avatarUrl: string | null = null;
+
+      if (telegramId) {
+        avatarUrl = await telegramInstance.getUserProfilePhoto({
+          telegramUserId: telegramId,
+        });
+      }
 
       const toUpdate = {
         displayName: displayName,

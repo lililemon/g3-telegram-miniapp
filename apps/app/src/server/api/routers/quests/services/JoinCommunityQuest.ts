@@ -1,11 +1,9 @@
-import { TelegramService } from "@repo/telegram";
 import { TRPCError } from "@trpc/server";
 import { env } from "../../../../../env";
 import { db } from "../../../../db";
 import { BaseQuest } from "./BaseQuest";
 import { QuestId } from "./QuestId";
-
-const telegramInstance = new TelegramService(env.BOT_TOKEN);
+import { telegramInstance } from "./telegramInstance";
 
 export class JoinCommunityTask extends BaseQuest {
   id = QuestId.JOIN_COMMUNITY;

@@ -21,6 +21,17 @@ export const getOccTemplates = publicProcedure
           _count: {
             select: { Occ: true },
           },
+          Occ: {
+            include: {
+              Provider: {
+                include: {
+                  User: {
+                    select: { id: true, displayName: true, avatarUrl: true },
+                  },
+                },
+              },
+            },
+          },
         },
       }),
       db.occTemplate.count({

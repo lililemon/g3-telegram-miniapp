@@ -2,18 +2,26 @@ import { Avatar, Button } from "@radix-ui/themes";
 import { cn } from "@repo/utils";
 import Link from "next/link";
 
+type Participant = {
+  id: number;
+  name: string;
+  avatar: string | null;
+};
+
 export const EpicItem = ({
   name,
   description,
   occMinted,
   hasYouMinted,
   href,
+  participants,
 }: {
   name: string;
   description?: string | null;
   occMinted: number;
   hasYouMinted: boolean;
   href: string;
+  participants: Participant[];
 }) => {
   return (
     <Link
@@ -55,12 +63,12 @@ export const EpicItem = ({
         <div className="mt-2.5">
           <div className="flex h-6 items-center gap-2">
             <div className="flex">
-              {Array.from({ length: 3 }).map((_, i) => (
+              {participants.map((p, i) => (
                 <Avatar
                   className="-ml-2 first:ml-0"
                   key={i}
-                  src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?&w=256&h=256&q=70&crop=focalpoint&fp-x=0.5&fp-y=0.3&fp-z=1&fit=crop"
-                  fallback="A"
+                  src={p.avatar ?? undefined}
+                  fallback={p.name.charAt(0)}
                   size="1"
                 />
               ))}

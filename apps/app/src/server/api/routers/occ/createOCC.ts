@@ -26,7 +26,7 @@ export const createOCC = protectedProcedure
           });
         }),
       interval: 5,
-      times: 10,
+      times: 20,
     });
 
     const _schema = z

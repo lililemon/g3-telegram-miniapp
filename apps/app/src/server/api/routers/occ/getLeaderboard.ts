@@ -7,6 +7,7 @@ import { publicProcedure } from "../../trpc";
 export class LeaderboardService {
   // singleton
   private static instance: LeaderboardService;
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   private constructor() {}
 
   public static getInstance(): LeaderboardService {

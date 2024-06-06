@@ -1,7 +1,6 @@
 "use client";
 import { Button } from "@radix-ui/themes";
-import { useParams } from "next/navigation";
-import router from "next/router";
+import router, { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { api } from "../../../../trpc/react";

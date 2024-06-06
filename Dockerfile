@@ -29,11 +29,8 @@ COPY . .
 
 FROM base as installer
 WORKDIR /app
-ENV APP_NAME=worker
-ENV APP_NAME2=my-node-app
 
-RUN npm install -g pnpm
-RUN npm install -g turbo
+RUN npm install -g pnpm turbo
 
 # First install dependencies (as they change less often)
 # COPY .gitignore .gitignore
@@ -53,7 +50,7 @@ RUN pnpm install
 # ARG TURBO_TOKEN
 # ENV TURBO_TOKEN=$TURBO_TOKEN
 
-RUN turbo run build --filter=${APP_NAME}... --filter=${APP_NAME2}...
+RUN turbo run build --filter=worker --filter my-node-app...
 
 FROM base AS worker
 WORKDIR /app

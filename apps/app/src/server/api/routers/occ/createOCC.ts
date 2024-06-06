@@ -1,43 +1,85 @@
+import { tryNTimes } from "@repo/utils";
+import { TRPCError } from "@trpc/server";
+import { Prisma } from "database";
 import { z } from "zod";
+import { getNFTIdAndOwnerFromTx } from "../../../../app/utils/ton";
+import { env } from "../../../../env";
 import { db } from "../../../db";
 import { protectedProcedure } from "../../trpc";
-
-class OccCreationService {
-  private static instance: OccCreationService;
-  private constructor() {}
-
-  public static getInstance(): OccCreationService {
-    if (!OccCreationService.instance) {
-      OccCreationService.instance = new OccCreationService();
-    }
-
-    return OccCreationService.instance;
-  }
-
-  public async getTx(txHash: string) {
-    // fetch tx from blockchain
-
-    return {
-      nftId: 123,
-      nftContract: "0x123",
-      nftOwner: "0x123",
-    };
-  }
-}
 
 // move to worker (later)
 export const createOCC = protectedProcedure
   .input(
     z.object({
       occTemplateId: z.number(),
-      txHash: z.string(),
+      txHash: z.string().min(64).max(64),
     }),
   )
-  .mutation(async ({ ctx: { session }, input: { occTemplateId } }) => {
+  .mutation(async ({ ctx: { session }, input: { occTemplateId, txHash } }) => {
+    // validate txHash
+    const rawData = await tryNTimes({
+      toTry: () =>
+        getNFTIdAndOwnerFromTx(txHash, env.TON_API_KEY).catch(() => {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Transaction not found",
+          });
+        }),
+      interval: 1,
+      times: 10,
+    });
+
+    const _schema = z
+      .object({
+        nftAddress: z.string(),
+        owner: z.string(),
+      })
+      .superRefine(async ({ owner }, ctx) => {
+        const provider = await db.provider
+          .findFirstOrThrow({
+            where: {
+              value: {
+                equals: owner,
+                mode: "insensitive",
+              },
+              type: "TON_WALLET",
+              userId: session.userId,
+            },
+          })
+          .catch((e) => {
+            if (
+              e instanceof Prisma.PrismaClientKnownRequestError &&
+              e.code === "P2025"
+            ) {
+              ctx.addIssue({
+                code: "custom",
+                message: "Owner not found",
+                path: ["txHash"],
+              });
+            } else {
+              throw e;
+            }
+          });
+
+        if (!provider) {
+          return;
+        }
+
+        if (provider.value !== owner) {
+          ctx.addIssue({
+            code: "custom",
+            message: `Owner mismatch: ${provider.value} !== ${owner}`,
+          });
+        }
+      });
+
+    const { nftAddress } = await _schema.parseAsync(rawData);
+
     const occ = await db.occ.create({
       data: {
-        userId: session.userId,
         occTemplateId,
+        userId: session.userId,
+        nftAddress,
       },
     });
 

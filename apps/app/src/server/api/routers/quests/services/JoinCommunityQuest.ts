@@ -8,7 +8,6 @@ import { telegramInstance } from "./telegramInstance";
 export class JoinCommunityTask extends BaseQuest {
   id = QuestId.JOIN_COMMUNITY;
   points = 200;
-  title = "Join community";
   description = "Join the community to earn points";
   text = "Join now";
 

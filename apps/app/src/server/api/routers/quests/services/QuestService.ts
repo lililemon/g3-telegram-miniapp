@@ -3,7 +3,7 @@ import PostHogClient, { Flag } from "../../../services/posthog";
 import { type IQuest } from "./BaseQuest";
 import { BindWalletAddressTask } from "./BindWalletAddressTask";
 import { JoinCommunityTask } from "./JoinCommunityQuest";
-import { type QuestId } from "./QuestId";
+import { mapQuestIdToTitle, type QuestId } from "./QuestId";
 import { QuestStatus } from "./QuestStatus";
 
 export class QuestService {
@@ -90,7 +90,7 @@ export class QuestService {
           id: task.id,
           points: task.points,
           metadata: metadata,
-          title: task.title,
+          title: mapQuestIdToTitle[task.id],
           description: task.description,
           text: task.text,
           isClaimed: isRewardAlreadyGiven,

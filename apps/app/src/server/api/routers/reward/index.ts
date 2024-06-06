@@ -69,11 +69,11 @@ export const rewardRouter = createTRPCRouter({
   getMyRewardLogList: protectedProcedure
     .input(
       z.object({
-        page: z.number().default(1),
         limit: z.number().default(10),
+        cursor: z.number().nullish(),
       }),
     )
-    .query(async ({ ctx: { session } }) => {
+    .query(async ({ ctx: { session }, input: { limit, cursor } }) => {
       const [items, total] = await Promise.all([
         db.rewardLogs.findMany({
           where: {
@@ -82,6 +82,8 @@ export const rewardRouter = createTRPCRouter({
           orderBy: {
             createdAt: "desc",
           },
+          cursor: cursor ? { id: cursor } : undefined,
+          take: limit,
         }),
         db.rewardLogs.count({
           where: {
@@ -93,6 +95,7 @@ export const rewardRouter = createTRPCRouter({
       return {
         items,
         total,
+        nextCursor: items.length < limit ? null : items[items.length - 1]!.id,
       };
     }),
 });

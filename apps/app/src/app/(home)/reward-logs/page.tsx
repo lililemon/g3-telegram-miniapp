@@ -1,55 +1,106 @@
 "use client";
-import { Box, Heading, Spinner, Table } from "@radix-ui/themes";
+import { Spinner } from "@radix-ui/themes";
 import { formatNumber } from "@repo/utils";
 import { format } from "date-fns";
-import { parseAsInteger, useQueryState } from "nuqs";
-import { Suspense } from "react";
+import groupBy from "lodash-es/groupBy";
+import { Suspense, useEffect, useMemo } from "react";
+import { useInView } from "react-intersection-observer";
+import { mapQuestIdToTitle } from "../../../server/api/routers/quests/services/QuestId";
 import { api } from "../../../trpc/react";
 import { useIsAuthenticated } from "../../_providers/useAuth";
+import { IconTime } from "./_icon/IconTime";
 
 const Page = () => {
   const { isAuthenticated } = useIsAuthenticated();
   const LIMIT = 10;
-  const [page] = useQueryState("reward_page", parseAsInteger.withDefault(1));
-  const { data, isPending, isSuccess } = api.reward.getMyRewardLogList.useQuery(
-    { limit: LIMIT, page },
-    {
-      enabled: isAuthenticated,
-    },
-  );
+  const [ref, inView] = useInView({
+    threshold: 0,
+  });
+
+  const { data, isSuccess, fetchNextPage, isFetching } =
+    api.reward.getMyRewardLogList.useInfiniteQuery(
+      { limit: LIMIT },
+      {
+        enabled: isAuthenticated,
+        getNextPageParam: (lastPage) => {
+          return lastPage.nextCursor;
+        },
+      },
+    );
+  useEffect(() => {
+    if (inView) {
+      void fetchNextPage();
+    }
+  }, [inView, fetchNextPage]);
+
+  const groupByMonthYear = useMemo(() => {
+    if (!isSuccess) return {};
+    const _data = data?.pages.flatMap((page) => page.items) ?? [];
+
+    // JUN 2024
+    const result = groupBy(_data, (item) =>
+      format(item.createdAt, "MMM yyyy").toUpperCase(),
+    );
+
+    return result;
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSuccess]);
 
   return (
-    <Box my="3">
-      <Heading size="5">Reward Logs</Heading>
-
-      <div className="mt-2">
-        <Spinner loading={isPending}>
-          <Table.Root variant="surface">
-            <Table.Header>
-              <Table.Row>
-                <Table.ColumnHeaderCell>Reward Type</Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell>Date</Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell>Points</Table.ColumnHeaderCell>
-              </Table.Row>
-            </Table.Header>
-
-            <Table.Body>
-              {isSuccess &&
-                data.items.map((item) => (
-                  <Table.Row key={item.id}>
-                    <Table.Cell>{item.taskId}</Table.Cell>
-                    <Table.Cell>
-                      {format(item.createdAt, "yyyy-MM-dd HH:mm:ss")}
-                    </Table.Cell>
-
-                    <Table.Cell>{formatNumber(item.point)}</Table.Cell>
-                  </Table.Row>
-                ))}
-            </Table.Body>
-          </Table.Root>
-        </Spinner>
+    <div>
+      <div className="text-xl font-bold leading-7 text-slate-900">
+        Point history
       </div>
-    </Box>
+
+      <div className="mt-4">
+        {isSuccess &&
+          Object.entries(groupByMonthYear).map(([key, logs]) => (
+            <div key={key}>
+              <div className="flex h-7 items-center justify-start gap-2 pb-1">
+                <div className="h-3 w-3 rounded-full bg-[#DAF200]" />
+                <div className="text-center text-base font-medium leading-normal tracking-tight text-[#717D00]">
+                  {key}
+                </div>
+                <div className="h-[3px] shrink grow basis-0 rounded-xl bg-[#DAF200]" />
+              </div>
+
+              {logs.map((log) => (
+                <div className="py-2" key={log.id}>
+                  <div className="flex justify-between">
+                    <div className="w-[273px] text-base font-medium leading-normal tracking-tight text-slate-900">
+                      {!!log.taskId &&
+                        mapQuestIdToTitle[
+                          log.taskId as unknown as keyof typeof mapQuestIdToTitle
+                        ]}
+                    </div>
+
+                    <div className="text-right text-xl font-bold leading-7 text-[#BACF00]">
+                      +{formatNumber(log.point)}
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <div className="size-4">
+                      <IconTime />
+                    </div>
+
+                    <div className="text-sm font-light leading-tight tracking-tight text-slate-500">
+                      {format(log.createdAt, "d MMM, yyyy")}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ))}
+      </div>
+
+      {/* Load more */}
+      <div ref={ref} />
+
+      {/* Loading */}
+      {isFetching && <Spinner className="mx-auto mt-8" />}
+    </div>
   );
 };
 

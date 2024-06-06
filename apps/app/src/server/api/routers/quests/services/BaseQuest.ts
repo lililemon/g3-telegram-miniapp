@@ -4,7 +4,6 @@ import { type QuestId } from "./QuestId";
 
 export interface IQuest {
   readonly id: QuestId;
-  readonly title: string;
   readonly points: number;
   readonly description: string;
   readonly text?: string;
@@ -34,7 +33,6 @@ export interface IQuest {
 export abstract class BaseQuest implements IQuest {
   abstract id: QuestId;
   abstract points: number;
-  abstract title: string;
   abstract description: string;
   text: string | undefined = undefined;
 

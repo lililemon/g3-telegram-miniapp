@@ -62,7 +62,11 @@ const Footer = () => {
 
                   return "OCC created";
                 },
-                error: "Failed to create OCC",
+                error: (e) => {
+                  console.log(`Failed to create OCC:`, e);
+
+                  return "Failed to create OCC";
+                },
               },
             );
           } finally {

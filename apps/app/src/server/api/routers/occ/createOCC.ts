@@ -25,7 +25,7 @@ export const createOCC = protectedProcedure
             message: "Transaction not found",
           });
         }),
-      interval: 2,
+      interval: 5,
       times: 10,
     });
 

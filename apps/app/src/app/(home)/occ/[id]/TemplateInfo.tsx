@@ -76,15 +76,15 @@ export const TemplateInfo = () => {
           Created by:
         </div>
         <Avatar
-          fallback={occ?.user.displayName ?? ""}
+          fallback={occ?.Provider.User.displayName ?? ""}
           alt="User"
           className="h-6 w-6 rounded"
-          src={`https://api.dicebear.com/8.x/micah/svg?seed=${occ?.user.id}`}
+          src={`https://api.dicebear.com/8.x/micah/svg?seed=${occ?.Provider.User.id}`}
         />
 
         <Skeleton loading={isPending} width="100px" height="20px">
           <div className="text-base font-medium leading-normal tracking-tight text-slate-700">
-            {isSuccess && occ.user.displayName}
+            {isSuccess && occ.Provider.User.displayName}
           </div>
         </Skeleton>
       </div>

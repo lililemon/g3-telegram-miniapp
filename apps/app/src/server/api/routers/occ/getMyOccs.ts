@@ -60,7 +60,8 @@ export class ReactionService {
                 acc[value.unifiedCode] = 0;
               }
 
-              acc[value.unifiedCode] += value.count;
+              acc[value.unifiedCode] =
+                (acc[value.unifiedCode] ?? 0) + value.count;
             }
 
             return acc;
@@ -87,7 +88,7 @@ export const getMyOccs = protectedProcedure
   )
   .query(async ({ input, ctx: { session } }) => {
     const where = {
-      userId: session.userId,
+      Provider: { userId: session.userId },
     } satisfies Prisma.OccWhereInput;
 
     const [occs, total] = await Promise.all([

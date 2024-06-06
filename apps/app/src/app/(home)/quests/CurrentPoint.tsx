@@ -1,6 +1,6 @@
 "use client";
 import { IconButton, Spinner } from "@radix-ui/themes";
-import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 import { IMAGES } from "../../_constants/image";
 import { useIsAuthenticated } from "../../_providers/useAuth";
 import { IconPoints } from "../_icons/IconPoints";
@@ -10,6 +10,7 @@ import { IconTime } from "./IconTime";
 export const CurrentPoint = () => {
   const { data, isSuccess, isPending } = useUser();
   const { isAuthenticated } = useIsAuthenticated();
+  const router = useRouter();
 
   if (!isAuthenticated) return null;
 
@@ -29,7 +30,7 @@ export const CurrentPoint = () => {
           variant="soft"
           radius="large"
           onClick={() => {
-            toast("Coming soon!");
+            router.push("/reward-logs");
           }}
         >
           <div className="size-5">

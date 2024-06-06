@@ -95,6 +95,9 @@ importers:
       '@twa-dev/sdk':
         specifier: ^6.4.2
         version: 6.9.2(react@18.2.0)
+      '@upstash/redis':
+        specifier: ^1.31.3
+        version: 1.31.3
       database:
         specifier: workspace:*
         version: link:../../packages/database
@@ -487,7 +490,7 @@ importers:
   packages/database:
     dependencies:
       '@prisma/client':
-        specifier: latest
+        specifier: ^5.14.0
         version: 5.14.0(prisma@5.14.0)
       tsup:
         specifier: ^8.0.2
@@ -7717,6 +7720,12 @@ packages:
     dev: false
     optional: true
 
+  /@upstash/redis@1.31.3:
+    resolution: {integrity: sha512-KtVgWBUEx/LGbR8oRwYexwzHh3s5DNqYW0bjkD+gjFZVOnREJITvK+hC4PjSSD+8D4qJ+Xbkfmy8ANADZ9EUFg==}
+    dependencies:
+      crypto-js: 4.2.0
+    dev: false
+
   /@urql/core@2.3.6(graphql@15.8.0):
     resolution: {integrity: sha512-PUxhtBh7/8167HJK6WqBv6Z0piuiaZHQGYbhwpNL9aIQmLROPEdaUYkY4wh45wPQXcTpnd11l0q3Pw+TI11pdw==}
     peerDependencies:
@@ -9530,6 +9539,10 @@ packages:
     resolution: {integrity: sha512-mCxBlsHFYh9C+HVpiEacem8FEBnMXgU9gy4zmNC+SXAZNB/1idgp/aulFJ4FgCi7GPEVbfyng092GqL2k2rmow==}
     dev: false
     optional: true
+
+  /crypto-js@4.2.0:
+    resolution: {integrity: sha512-KALDyEYgpY+Rlob/iriUtjV6d5Eq+Y191A5g4UqLAi8CyGP9N1+FdVbkc1SxKc2r4YAYqG8JzO2KGL+AizD70Q==}
+    dev: false
 
   /crypto-random-string@1.0.0:
     resolution: {integrity: sha512-GsVpkFPlycH7/fRR7Dhcmnoii54gV1nz7y4CWyeFS14N+JVBBhY+r8amRHE4BwSYal7BPTDp8isvAlCxyFt3Hg==}

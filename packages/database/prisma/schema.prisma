@@ -16,7 +16,6 @@ model User {
     point      Int          @default(0)
     RewardLogs RewardLogs[]
     Provider   Provider[]
-    Occ        Occ[]
 }
 
 model OccTemplate {
@@ -54,10 +53,12 @@ model Provider {
     updatedAt DateTime @updatedAt
 
     type   ProviderType
-    User   User?        @relation(fields: [userId], references: [id])
-    userId Int?
+    User   User         @relation(fields: [userId], references: [id])
+    userId Int
 
     value String
+
+    Occ Occ[]
 
     @@unique([type, value])
 }
@@ -70,9 +71,6 @@ model Occ {
     occTemplate   OccTemplate @relation(fields: [occTemplateId], references: [id])
     occTemplateId Int
 
-    user   User @relation(fields: [userId], references: [id])
-    userId Int
-
     shareCount Int     @default(0)
     Share      Share[]
 
@@ -80,7 +78,8 @@ model Occ {
 
     metadata Json?
 
-    @@index([userId])
+    Provider   Provider @relation(fields: [providerId], references: [id])
+    providerId Int
 }
 
 model Share {

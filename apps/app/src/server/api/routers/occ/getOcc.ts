@@ -35,11 +35,15 @@ export const getOcc = publicProcedure
     const result = await db.occ.findUniqueOrThrow({
       where: { id },
       include: {
-        user: {
+        Provider: {
           select: {
-            id: true,
-            avatarUrl: true,
-            displayName: true,
+            User: {
+              select: {
+                id: true,
+                avatarUrl: true,
+                displayName: true,
+              },
+            },
           },
         },
 

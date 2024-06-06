@@ -75,10 +75,18 @@ export const createOCC = protectedProcedure
 
     const { nftAddress } = await _schema.parseAsync(rawData);
 
+    const { id: providerId } = await db.provider.findFirstOrThrow({
+      where: {
+        value: rawData.owner,
+        type: "TON_WALLET",
+        userId: session.userId,
+      },
+    });
+
     const occ = await db.occ.create({
       data: {
         occTemplateId,
-        userId: session.userId,
+        providerId,
         nftAddress,
       },
     });

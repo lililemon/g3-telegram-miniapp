@@ -25,7 +25,8 @@ export const LeaderboardItem = ({
         </div>
 
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <Avatar
+          fallback="?"
           className="ml-2 mt-2 aspect-square h-28 w-28 rounded-xl bg-contain"
           src={occImageUrl}
           alt="occ"

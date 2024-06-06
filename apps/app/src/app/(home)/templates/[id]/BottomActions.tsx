@@ -1,6 +1,6 @@
 "use client";
-import { Button } from "@radix-ui/themes";
-import router, { useParams } from "next/navigation";
+import { Button, Spinner } from "@radix-ui/themes";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { api } from "../../../../trpc/react";
@@ -27,8 +27,8 @@ export const BottomActions = () => {
 
 const Footer = () => {
   const { sendMintNftFromFaucet } = useNftContract();
-  const { mutateAsync, isPending: isCreatingOCC } =
-    api.occ.createOCC.useMutation();
+  const router = useRouter();
+  const { mutateAsync } = api.occ.createOCC.useMutation();
   const { id } = useParams<{ id: string }>();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -38,7 +38,7 @@ const Footer = () => {
         radius="large"
         size="4"
         className="flex-1"
-        loading={isLoading}
+        disabled={isLoading}
         onClick={async () => {
           setIsLoading(true);
           try {
@@ -57,7 +57,7 @@ const Footer = () => {
               {
                 loading: "Creating OCC...",
                 success: (data) => {
-                  void router.push(`/occ/${data.id}`);
+                  void router.replace(`/occ/${data.id}`);
 
                   return "OCC created";
                 },
@@ -74,9 +74,11 @@ const Footer = () => {
         }}
       >
         <div className="flex items-center gap-2">
-          <div className="size-6">
-            <IconLock />
-          </div>
+          <Spinner loading={isLoading}>
+            <div className="size-6">
+              <IconLock />
+            </div>
+          </Spinner>
           <div className="text-xl font-bold leading-7 text-slate-900">
             Unlock this EPIC
           </div>

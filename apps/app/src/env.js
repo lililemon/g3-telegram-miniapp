@@ -18,6 +18,15 @@ export const env = createEnv({
       .default(
         "AF6GGCODMULLAEYAAAAEE6TZ6PWQRJIDMH4MAPBEOJGLQMAFGQS7C7UZRG7NZT64PL4SRMQ",
       ),
+    UPSTASH_REDIS_REST_URL: z
+      .string()
+      .url()
+      .default("https://evolved-scorpion-40186.upstash.io"),
+    UPSTASH_REDIS_REST_TOKEN: z
+      .string()
+      .default(
+        "AZz6ASQgMzQ5NmRmNGYtNTBiMC00MWE0LTkyNDktOGMxODFmNWQyMmI4MGY5MjVjZmY3N2RhNDg4NzgzNmM0MDNkYjA3Nzg3ODU=",
+      ),
   },
 
   /**
@@ -71,6 +80,8 @@ export const env = createEnv({
     NEXT_PUBLIC_TON_API_KEY_FRONTEND:
       process.env.NEXT_PUBLIC_TON_API_KEY_FRONTEND,
     TON_API_KEY: process.env.TON_API_KEY,
+    UPSTASH_REDIS_REST_URL: process.env.UPSTASH_REDIS_REST_URL,
+    UPSTASH_REDIS_REST_TOKEN: process.env.UPSTASH_REDIS_REST_TOKEN,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

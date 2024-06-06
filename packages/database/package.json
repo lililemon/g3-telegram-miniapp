@@ -2,7 +2,7 @@
   "name": "database",
   "version": "0.0.0",
   "dependencies": {
-    "@prisma/client": "latest",
+    "@prisma/client": "^5.14.0",
     "tsup": "^8.0.2",
     "typescript": "^5.4.5"
   },

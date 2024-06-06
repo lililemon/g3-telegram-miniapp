@@ -36,13 +36,7 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
     <PostHogProvider client={posthog}>
       <TRPCReactProvider>
-        <TonConnectUIProvider
-          manifestUrl={env.NEXT_PUBLIC_TWA_MANIFEST_URL}
-          actionsConfiguration={{
-            twaReturnUrl:
-              env.NEXT_PUBLIC_TWA_RETURN_URL as `${string}://${string}`,
-          }}
-        >
+        <TonConnectUIProvider manifestUrl={env.NEXT_PUBLIC_TWA_MANIFEST_URL}>
           <SDKProvider acceptCustomStyles debug>
             <BackendAuthProvider>
               {children}

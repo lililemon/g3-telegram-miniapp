@@ -10,7 +10,9 @@ export const getMyStats = protectedProcedure.query(
       db.share.count({
         where: {
           occ: {
-            userId: userId,
+            Provider: {
+              userId: userId,
+            },
           },
         },
       }),
@@ -18,7 +20,9 @@ export const getMyStats = protectedProcedure.query(
         .aggregate({
           where: {
             occ: {
-              userId: userId,
+              Provider: {
+                userId: userId,
+              },
             },
           },
           _sum: {
@@ -28,7 +32,9 @@ export const getMyStats = protectedProcedure.query(
         .then((res) => res._sum.reactionCount ?? 0),
       db.occ.count({
         where: {
-          userId: userId,
+          Provider: {
+            userId: userId,
+          },
         },
       }),
     ]);

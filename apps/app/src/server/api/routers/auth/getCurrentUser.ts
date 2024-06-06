@@ -9,11 +9,6 @@ class GetCurrentUserService {
     displayName: true,
     avatarUrl: true,
     telegramId: true,
-    _count: {
-      select: {
-        Occ: true,
-      },
-    },
     Provider: {
       select: {
         id: true,

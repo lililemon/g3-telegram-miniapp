@@ -1,9 +1,9 @@
 import { CHAIN } from "@tonconnect/protocol";
 import { useTonConnectUI } from "@tonconnect/ui-react";
 import { Address, beginCell, toNano } from "ton-core";
-import NftCollection from "../contracts/NftCollection";
-import { setItemContentCell } from "../contracts/nftContent/onChain";
-import { getTxByBOC } from "../utils/ton";
+import NftCollection from "../_contracts/NftCollection";
+import { setItemContentCell } from "../_contracts/nftContent/onChain";
+import { getTxByBOC } from "../_utils/ton";
 import { useAsyncInitialize } from "./useAsyncInitialize";
 import { useTonClient } from "./useTonClient";
 import { useTonConnect } from "./useTonConnect";
@@ -37,7 +37,6 @@ export function useNftContract() {
     address: nftContract?.address.toString(),
     sendMintNft: (args: mintArgs) => {
       if (!nftContract) throw new Error("Contract not initialized");
-
       if (!wallet) throw new Error("Wallet not initialized");
 
       return nftContract.sendMintNft(sender, {

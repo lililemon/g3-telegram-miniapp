@@ -11,6 +11,8 @@ bot = "pnpm --filter my-node-app run start"
 worker = "pnpm --filter worker run start"
 
 [build]
+build-target = "worker"
+
 
 [env]
 PORT = '8080'

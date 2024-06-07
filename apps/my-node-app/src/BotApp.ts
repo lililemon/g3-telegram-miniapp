@@ -34,7 +34,7 @@ export class BotApp {
       )
     );
     bot.command(COMMANDS.start, async (ctx) => {
-      await ctx.reply("👏 Welcome to Gall3ry Telegram MiniApp!");
+      await ctx.reply(`👏 Welcome to Gall3ry Telegram MiniApp\!`);
     });
   }
 

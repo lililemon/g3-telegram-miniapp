@@ -44,11 +44,11 @@ RUN pnpm install
 # COPY turbo.json turbo.json
 
 # Uncomment and use build args to enable remote caching
-# ARG TURBO_TEAM
-# ENV TURBO_TEAM=$TURBO_TEAM
+ARG TURBO_TEAM
+ENV TURBO_TEAM=$TURBO_TEAM
 
-# ARG TURBO_TOKEN
-# ENV TURBO_TOKEN=$TURBO_TOKEN
+ARG TURBO_TOKEN
+ENV TURBO_TOKEN=$TURBO_TOKEN
 
 RUN turbo run build --filter=worker --filter my-node-app...
 

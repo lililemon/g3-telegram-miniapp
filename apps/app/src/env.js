@@ -31,7 +31,7 @@ export const env = createEnv({
     UPSTASH_QSTASH_TOKEN: z
       .string()
       .default(
-        "eyJVc2VySUQiOiJlODdmNTIwNS1mOTQxLTRlZDgtYjRhNS0wMTljNmMwZjZmZDEiLCJQYXNzd29yZCI6IjZlZDE2YWZmYzJjNDQxMDBiMTc3MzNlZThjNzM2NTA1In0",
+        "eyJVc2VySUQiOiJlODdmNTIwNS1mOTQxLTRlZDgtYjRhNS0wMTljNmMwZjZmZDEiLCJQYXNzd29yZCI6IjZlZDE2YWZmYzJjNDQxMDBiMTc3MzNlZThjNzM2NTA1In0=",
       ),
     WORKER_PUBLIC_URL: z
       .string()

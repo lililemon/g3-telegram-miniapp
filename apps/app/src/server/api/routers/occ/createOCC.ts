@@ -1,5 +1,6 @@
 import { tryNTimes } from "@repo/utils";
 import { TRPCError } from "@trpc/server";
+import axios from "axios";
 import { Prisma } from "database";
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
@@ -84,6 +85,13 @@ export const createOCC = protectedProcedure
       },
     });
 
+    if (await db.occ.findFirst({ where: { nftAddress } })) {
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: "OCC already exists",
+      });
+    }
+
     const uuid = uuidv4();
     const occ = await db.occ.create({
       data: {
@@ -94,17 +102,18 @@ export const createOCC = protectedProcedure
       },
     });
 
-    await fetch(
-      `https://qstash.upstash.io/v2/publish/${env.WORKER_PUBLIC_URL}/webhook/occ/capture-gif`,
+    const urlToFetch = `https://qstash.upstash.io/v2/publish/${env.WORKER_PUBLIC_URL}/webhook/occ/capture-gif`;
+
+    await axios.post(
+      urlToFetch,
       {
-        method: "POST",
+        occUUID: uuid,
+      },
+      {
         headers: {
           Authorization: `Bearer ${env.UPSTASH_QSTASH_TOKEN}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          occUUID: uuid,
-        }),
       },
     );
 

@@ -36,7 +36,7 @@ model RewardLogs {
 
     user User @relation(fields: [userId], references: [id])
 
-    taskId String? // should not optional
+    taskId String
     point  Int
     userId Int
 
@@ -74,7 +74,7 @@ model Occ {
     shareCount Int     @default(0)
     Share      Share[]
 
-    nftAddress String? // TODO: should not optional
+    nftAddress String
 
     metadata Json?
 

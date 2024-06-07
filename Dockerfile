@@ -1,8 +1,8 @@
 FROM node:20 as base
 # Update apt-get and install the necessary libraries
 # This is mainly so that the `canvas` package can be installed
-# RUN apt-get update && \
-#     apt-get install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
+RUN apt-get update && \
+    apt-get install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
 
 RUN apt-get update \
     && apt-get install --assume-yes --no-install-recommends --quiet \
@@ -44,11 +44,11 @@ RUN pnpm install
 # COPY turbo.json turbo.json
 
 # Uncomment and use build args to enable remote caching
-ARG TURBO_TEAM
-ENV TURBO_TEAM=$TURBO_TEAM
+# ARG TURBO_TEAM
+# ENV TURBO_TEAM=$TURBO_TEAM
 
-ARG TURBO_TOKEN
-ENV TURBO_TOKEN=$TURBO_TOKEN
+# ARG TURBO_TOKEN
+# ENV TURBO_TOKEN=$TURBO_TOKEN
 
 RUN turbo run build --filter=worker --filter my-node-app...
 
@@ -65,7 +65,7 @@ RUN npm install -g pnpm
 COPY --from=installer /app .
 
 # install playwright dependencies
-RUN pnpx playwright install
+RUN pnpx playwright install --with-deps
 RUN pnpx playwright install-deps
 
 # TODO: Maybe use the npm script?

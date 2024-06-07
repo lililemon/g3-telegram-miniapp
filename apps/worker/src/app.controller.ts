@@ -50,6 +50,8 @@ export class AppController {
         throw new HttpException(error.errors, 400);
       }
 
+      console.error(error);
+
       throw new HttpException(error, 500);
     }
   }

@@ -6,6 +6,7 @@ import { MyCurrentPosition } from "./MyCurrentPosition";
 
 export default function Home() {
   const { isAuthenticated } = useIsAuthenticated();
+
   return (
     <div>
       <Top />

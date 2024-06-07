@@ -46,10 +46,11 @@ export const useAuthHydrated = () => {
 
 export const useIsAuthenticated = () => {
   const { accessToken } = useAuth();
+  const isHydrated = useAuthHydrated();
   const { isLoading: isUserLoading } = api.auth.getCurrentUser.useQuery();
 
   return {
-    isAuthenticated: !!accessToken,
-    isLoading: isUserLoading,
+    isAuthenticated: !!accessToken && isHydrated,
+    isLoading: isUserLoading || !isHydrated,
   };
 };

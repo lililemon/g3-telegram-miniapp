@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useInitData } from "@tma.js/sdk-react";
 import { useTonConnectUI } from "@tonconnect/ui-react";
 import { useEffect } from "react";
+import { useUser } from "../(home)/useUser";
 import { api, type RouterInputs } from "../../trpc/react";
 import { useAuth, useAuthHydrated, useIsAuthenticated } from "./useAuth";
 
@@ -25,14 +26,20 @@ export const BackendAuthProvider = ({
       enabled: false,
     },
   );
-  const { isAuthenticated } = useIsAuthenticated();
-  const { data, isSuccess } = api.auth.getCurrentUser.useQuery(undefined, {
-    enabled: isAuthenticated,
-  });
+  const { data, isSuccess } = useUser();
+  const { isAuthenticated, isLoading } = useIsAuthenticated();
+
   const { mutateAsync: checkProof } = api.auth.checkProof.useMutation();
   const { mutateAsync: updateDisplayName } =
     api.auth.updateDisplayName.useMutation();
   const initData = useInitData(true);
+
+  useEffect(() => {
+    if (isLoading && !isAuthenticated) {
+      reset();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAuthenticated, isLoading]);
 
   useEffect(() => {
     if (isSuccess && initData) {

@@ -3,7 +3,7 @@ import { Avatar, Button, IconButton, Skeleton } from "@radix-ui/themes";
 import { formatTonAddress } from "@repo/utils";
 import { toUserFriendlyAddress } from "@tonconnect/sdk";
 import Link from "next/link";
-import { memo, useState } from "react";
+import { memo, useMemo, useState } from "react";
 import { api } from "../../../trpc/react";
 import { Drawer, DrawerContent, DrawerFooter } from "../_components/Drawer";
 import { LoggedUserOnly } from "../_components/LoggedUserOnly";
@@ -15,27 +15,31 @@ import { useEditQueryState } from "./useEditQueryState";
 import { useLogout } from "./useLogout";
 
 const Page = () => {
-  const { data: user, tonProvider } = useUser();
+  const { data: user } = useUser();
   const { data: stats, isSuccess } = api.auth.getMyStats.useQuery();
   const { setEditProfileOpen } = useEditQueryState();
   const [signOutDrawerOpen, setSignOutDrawerOpen] = useState(false);
 
-  const items = isSuccess
-    ? [
-        {
-          title: "Shares",
-          value: Intl.NumberFormat().format(stats.totalShare),
-        },
-        {
-          title: "Reactions",
-          value: Intl.NumberFormat().format(stats.totalReaction),
-        },
-        {
-          title: "Minted",
-          value: Intl.NumberFormat().format(stats.totalMinted),
-        },
-      ]
-    : [];
+  const tonProvider = user?.tonProvider;
+
+  const items = useMemo(() => {
+    return isSuccess
+      ? [
+          {
+            title: "Shares",
+            value: Intl.NumberFormat().format(stats.totalShare),
+          },
+          {
+            title: "Reactions",
+            value: Intl.NumberFormat().format(stats.totalReaction),
+          },
+          {
+            title: "Minted",
+            value: Intl.NumberFormat().format(stats.totalMinted),
+          },
+        ]
+      : [];
+  }, [isSuccess, stats]);
 
   return (
     <>

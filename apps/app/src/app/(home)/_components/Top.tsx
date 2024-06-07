@@ -1,42 +1,45 @@
+"use client";
 import { Flex, Spinner } from "@radix-ui/themes";
 import Image from "next/image";
+import { memo } from "react";
 import { IMAGES } from "../../_constants/image";
 import { useIsAuthenticated } from "../../_providers/useAuth";
 import { CurrentPoint } from "../quests/CurrentPoint";
 
-export const Top = () => {
+export const Top = memo(() => {
   const { isAuthenticated, isLoading } = useIsAuthenticated();
+
   return (
     <div>
-      <Spinner loading={isLoading}>
-        {isAuthenticated ? (
+      {isAuthenticated ? (
+        <Spinner loading={isLoading}>
           <CurrentPoint />
-        ) : (
-          <Flex direction="column">
-            <div className="z-10">
-              <div className="mt-8 flex flex-col items-center">
-                <div className="flex h-12 items-center justify-start gap-3">
-                  <div className="h-4 w-4 rounded-full bg-[#DAF200]" />
-                  <div className="text-center text-4xl font-bold leading-[48px] text-slate-900">
-                    Create your EPIC
-                  </div>
-                </div>
-                <div className="flex h-12 items-center justify-start gap-3">
-                  <div className="h-4 w-4 rounded-full bg-[#DAF200]" />
-                  <div className="text-center text-4xl font-bold leading-[48px] text-slate-900">
-                    And get $EPIC
-                  </div>
+        </Spinner>
+      ) : (
+        <Flex direction="column">
+          <div className="z-10">
+            <div className="mt-8 flex flex-col items-center">
+              <div className="flex h-12 items-center justify-start gap-3">
+                <div className="h-4 w-4 rounded-full bg-[#DAF200]" />
+                <div className="text-center text-4xl font-bold leading-[48px] text-slate-900">
+                  Create your EPIC
                 </div>
               </div>
-
-              <div className="mt-2 text-center text-sm font-light leading-tight tracking-tight text-slate-700">
-                More product details - No one shall be subjected to arbitrary
-                arrest, detention or exile.
+              <div className="flex h-12 items-center justify-start gap-3">
+                <div className="h-4 w-4 rounded-full bg-[#DAF200]" />
+                <div className="text-center text-4xl font-bold leading-[48px] text-slate-900">
+                  And get $EPIC
+                </div>
               </div>
             </div>
-          </Flex>
-        )}
-      </Spinner>
+
+            <div className="mt-2 text-center text-sm font-light leading-tight tracking-tight text-slate-700">
+              More product details - No one shall be subjected to arbitrary
+              arrest, detention or exile.
+            </div>
+          </div>
+        </Flex>
+      )}
 
       <div className="mt-6">
         <div className="text-center text-xl font-bold leading-7 text-slate-900">
@@ -70,4 +73,6 @@ export const Top = () => {
       </div>
     </div>
   );
-};
+});
+
+Top.displayName = "Top";

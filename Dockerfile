@@ -64,6 +64,10 @@ RUN npm install -g pnpm
 # USER expressjs
 COPY --from=installer /app .
 
+# install playwright dependencies
+RUN pnpx playwright install
+RUN pnpx playwright install-deps
+
 # TODO: Maybe use the npm script?
 CMD pnpm --filter "${APP_NAME}" run start
 

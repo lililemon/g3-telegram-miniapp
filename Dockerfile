@@ -63,11 +63,13 @@ RUN npm install -g pnpm
 
 # USER expressjs
 COPY --from=installer /app .
+WORKDIR /app/packages/worker
 
 # install playwright dependencies
-RUN pnpx playwright install --with-deps
-RUN pnpx playwright install-deps
+RUN pnpm exec playwright install --with-deps chromium
+RUN pnpm playwright install-deps
 
+WORKDIR /app
 # TODO: Maybe use the npm script?
 CMD pnpm --filter "${APP_NAME}" run start
 

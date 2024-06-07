@@ -122,7 +122,7 @@ export class AppService {
         }),
       )
       .implement(async ({ url }) => {
-        let browser: Browser | undefined;
+        let browser: Browser | null = null;
 
         try {
           browser = await chromium.launch({});
@@ -145,8 +145,13 @@ export class AppService {
           });
 
           return this._uploadGif({ base64 });
+        } catch (e) {
+          console.error(e);
+          throw e;
         } finally {
-          await browser.close();
+          if (browser) {
+            await browser.close();
+          }
         }
       })(payload);
   }

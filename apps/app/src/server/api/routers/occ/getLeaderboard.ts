@@ -83,6 +83,7 @@ export class LeaderboardService {
     }
 
     return {
+      occId: item.id,
       avatarUrl: item.Provider.User.avatarUrl,
       occImageUrl: "",
       rank: rank + 1,

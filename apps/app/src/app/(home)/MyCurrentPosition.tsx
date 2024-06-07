@@ -15,8 +15,9 @@ export const MyCurrentPosition = () => {
             Your current position:
           </div>
 
-          <div className="mt-8">
+          <div className="mt-2">
             <LeaderboardItem
+              occId={data.occId}
               avatarUrl={data.avatarUrl}
               occImageUrl={(IMAGES.MOCK_OCC as any)[data.rank % 5]}
               rank={data.rank}

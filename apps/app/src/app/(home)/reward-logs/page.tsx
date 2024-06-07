@@ -1,4 +1,5 @@
 "use client";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { Spinner } from "@radix-ui/themes";
 import { formatNumber } from "@repo/utils";
 import { format } from "date-fns";
@@ -16,7 +17,7 @@ const Page = () => {
   const [ref, inView] = useInView({
     threshold: 0,
   });
-
+  const [parent] = useAutoAnimate();
   const { data, isSuccess, fetchNextPage, isFetching } =
     api.reward.getMyRewardLogList.useInfiniteQuery(
       { limit: LIMIT },
@@ -53,7 +54,7 @@ const Page = () => {
         Point history
       </div>
 
-      <div className="mt-4">
+      <div className="mt-4" ref={parent}>
         {isSuccess &&
           Object.entries(groupByMonthYear).map(([key, logs]) => (
             <div key={key}>

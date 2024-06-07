@@ -8,6 +8,8 @@ export const useUser = () => {
 
   const result = api.auth.getCurrentUser.useQuery(undefined, {
     enabled: isAuthenticated,
+    refetchOnWindowFocus: false,
+    staleTime: 1000 * 60 * 5,
   });
 
   const tonProvider = useMemo(() => {

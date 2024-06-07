@@ -12,7 +12,7 @@ export class BotApp {
   private static instance: BotApp;
   private bot = new Telegraf(env.BOT_TOKEN);
 
-  private constructor() { }
+  private constructor() {}
 
   public static getInstance(): BotApp {
     if (!BotApp.instance) {
@@ -34,20 +34,7 @@ export class BotApp {
       )
     );
     bot.command(COMMANDS.start, async (ctx) => {
-      await ctx.reply("👏 Welcome to the OCC!", {
-        reply_markup: {
-          inline_keyboard: [
-            [
-              {
-                text: "Mint OCC",
-                web_app: {
-                  url: "https://phantomk0308.github.io/g3-twa-epic/"
-                },
-              },
-            ],
-          ],
-        },
-      });
+      await ctx.reply("👏 Welcome to Gall3ry Telegram MiniApp!");
     });
   }
 
@@ -76,7 +63,7 @@ export class BotApp {
           return;
         }
 
-        const [occTemplate] = await Promise.all([
+        const [occTemplate, occ] = await Promise.all([
           db.occTemplate.findUniqueOrThrow({
             where: { id: +occEventId },
           }),
@@ -97,13 +84,15 @@ export class BotApp {
             description: `Join OCC ${occTemplate.name}`,
             input_message_content: {
               message_text: `
-@${ctx.inlineQuery.from.username}'s sticker
+@${ctx.inlineQuery.from.username}: Good morning 🌞, join OCC ${occTemplate.name} now! 🚀
                     `,
               link_preview_options: {
                 prefer_large_media: true,
                 prefer_small_media: false,
                 show_above_text: false,
-                url: "https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExcTQydmU1ZmQ2ejcwY2h1cXp4ODg3eWNvaGc4YjlhMjNldnBzbmF2OSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/njXxKcoVWY5hiEBS2w/giphy.gif",
+                url:
+                  occ.imageUrl ??
+                  "https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExcTQydmU1ZmQ2ejcwY2h1cXp4ODg3eWNvaGc4YjlhMjNldnBzbmF2OSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/njXxKcoVWY5hiEBS2w/giphy.gif",
               },
               parse_mode: "MarkdownV2",
             } as InputTextMessageContent,
@@ -125,24 +114,15 @@ export class BotApp {
           return;
         }
 
-        if (!isChatTypeSupported(ctx.inlineQuery.chat_type)) {
-          // Do nothing
-          console.log(
-            `Not supported chat type: ${ctx.inlineQuery.chat_type}, ${ctx.inlineQuery.from.username}`
-          );
-
-          //  TODO: send that we are not support
-
-          return;
+        if (isChatTypeSupported(ctx.inlineQuery.chat_type)) {
+          // update user data
+          const storage = PersistentDb.getInstance();
+          storage.appendUserData(ctx.inlineQuery.from.id, {
+            occEventId: +occEventId,
+            occId: +occId,
+            chatType: ctx.inlineQuery.chat_type,
+          });
         }
-
-        // update user data
-        const storage = PersistentDb.getInstance();
-        storage.appendUserData(ctx.inlineQuery.from.id, {
-          occEventId: +occEventId,
-          occId: +occId,
-          chatType: ctx.inlineQuery.chat_type,
-        });
 
         // Explicit usage
         await ctx.telegram.answerInlineQuery(ctx.inlineQuery.id, result);

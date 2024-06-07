@@ -4,7 +4,7 @@ import { TestOccTemplate } from "./TestOccTemplate";
 const Page = () => {
   return (
     <>
-      <TestOccTemplate />
+      <TestOccTemplate shouldRecord />
     </>
   );
 };

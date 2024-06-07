@@ -1,9 +1,15 @@
 "use client";
+import { parseAsBoolean, useQueryState } from "nuqs";
 import { Mousewheel, Navigation, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { TestOccTemplate } from "../../rive/TestOccTemplate";
 import styles from "./TemplateInfo.module.scss";
 
 export const TemplateInfo = () => {
+  const [shouldRecord] = useQueryState(
+    "record",
+    parseAsBoolean.withDefault(false),
+  );
   const images = Array.from({ length: 5 }, (_, i) => i + 1).map(
     (v) => `https://picsum.photos/id/${v}/800/800`,
   );
@@ -32,11 +38,12 @@ export const TemplateInfo = () => {
         {images.map((image, index) => (
           <SwiperSlide key={index} className="rounded-xl bg-neutral-300">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            {/* <img
               className="aspect-square rounded-xl"
               src={image}
               alt="Template Image"
-            />
+            /> */}
+            <TestOccTemplate shouldRecord={shouldRecord} />
           </SwiperSlide>
         ))}
       </Swiper>

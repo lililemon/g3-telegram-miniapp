@@ -1,14 +1,18 @@
 "use client";
 
 import { SDKProvider } from "@tma.js/sdk-react";
-import { TonConnectUIProvider } from "@tonconnect/ui-react";
 import { AppProgressBar as ProgressBar } from "next-nprogress-bar";
+import dynamic from "next/dynamic";
 import { posthog } from "posthog-js";
 import { PostHogProvider } from "posthog-js/react";
 import { useEffect } from "react";
 import { env } from "../../env";
 import { TRPCReactProvider } from "../../trpc/react";
 import { BackendAuthProvider } from "./BackendAuthProvider";
+const TonConnectUIProvider = dynamic(
+  () => import("@tonconnect/ui-react").then((mod) => mod.TonConnectUIProvider),
+  { ssr: false },
+);
 
 if (typeof window !== "undefined") {
   posthog.init(env.NEXT_PUBLIC_POSTHOG_KEY, {
@@ -37,7 +41,7 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
     <PostHogProvider client={posthog}>
       <TRPCReactProvider>
         <TonConnectUIProvider manifestUrl={env.NEXT_PUBLIC_TWA_MANIFEST_URL}>
-          <SDKProvider acceptCustomStyles debug>
+          <SDKProvider acceptCustomStyles>
             <BackendAuthProvider>
               {children}
 

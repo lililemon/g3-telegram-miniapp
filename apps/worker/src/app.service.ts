@@ -2,6 +2,8 @@ import { Injectable, Logger } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 // @ts-ignore
 import { groupBy } from 'lodash-es';
+import { Browser, chromium } from 'playwright';
+import { z } from 'zod';
 import { TelegramService } from './TelegramService.js';
 import { db } from './db.js';
 import { EmojiService } from './services/emoji.js';
@@ -109,5 +111,71 @@ export class AppService {
   async resetMapping() {
     const { count } = await db.mapTonProofToPayload.deleteMany({});
     this.logger.debug('[resetMapping] Deleted %d mappings', count);
+  }
+
+  getGif(payload: { url: string }) {
+    return z
+      .function()
+      .args(
+        z.object({
+          url: z.string(),
+        }),
+      )
+      .implement(async ({ url }) => {
+        let browser: Browser | undefined;
+
+        try {
+          browser = await chromium.launch({});
+          const page = await browser.newPage();
+
+          await page.goto(url);
+          // add event listener (gif)
+          const base64 = await page.evaluate(() => {
+            return new Promise<string>((resolve, reject) => {
+              window.addEventListener('gif', (e: any) => {
+                const gif = e as CustomEvent<string>;
+
+                resolve(gif.detail);
+              });
+
+              setTimeout(() => {
+                reject(new Error('Timeout'));
+              }, 30 * 1000);
+            });
+          });
+
+          return this._uploadGif({ base64 });
+        } finally {
+          await browser.close();
+        }
+      })(payload);
+  }
+
+  private _uploadGif(payload: { base64: string }) {
+    return z
+      .function()
+      .args(
+        z.object({
+          base64: z.string(),
+        }),
+      )
+      .implement(async ({ base64 }) => {
+        //data:image/gif;base64
+        const file = base64.replace(/^data:image\/gif;base64,/, '');
+
+        const response = await fetch('https://api.akord.com/files', {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Api-Key': 'IMHfyQuS4s6WOKzdJ1frI56WaxuuJ79qarJFekQq',
+            'Content-Type': 'image/gif',
+          },
+          body: Buffer.from(file, 'base64'),
+        });
+        const result = await response.json();
+        const url = result.cloud.url;
+
+        return url;
+      })(payload);
   }
 }

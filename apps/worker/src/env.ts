@@ -9,5 +9,9 @@ export const env = z
     TELEGRAM_API_HASH: z.string(),
     TELEGRAM_STRING_SESSION: z.string(),
     DATABASE_URL: z.string(),
+    FRONTEND_URL: z
+      .string()
+      .url()
+      .default('https://staging.miniapp.gall3ry.io'),
   })
   .parse(process.env);

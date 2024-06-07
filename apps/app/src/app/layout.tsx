@@ -9,7 +9,6 @@ import "swiper/css/pagination";
 
 import { cn } from "@repo/utils";
 import { Kanit } from "next/font/google";
-import Script from "next/script";
 import { Toaster } from "react-hot-toast";
 import { Providers } from "./_providers";
 
@@ -37,7 +36,6 @@ export default function RootLayout({
     <html lang="en" className={cn(kanit.variable)}>
       <body className="font-sans">
         <Providers>
-          <Script src="https://telegram.org/js/telegram-web-app.js"></Script>
           <Toaster />
           <Theme radius="full" accentColor="lime">
             {children}

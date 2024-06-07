@@ -1,6 +1,7 @@
 import { tryNTimes } from "@repo/utils";
 import { TRPCError } from "@trpc/server";
 import { Prisma } from "database";
+import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 import { getNFTIdAndOwnerFromTx } from "../../../../app/_utils/ton";
 import { env } from "../../../../env";
@@ -83,13 +84,29 @@ export const createOCC = protectedProcedure
       },
     });
 
+    const uuid = uuidv4();
     const occ = await db.occ.create({
       data: {
         occTemplateId,
         providerId,
         nftAddress,
+        uuid,
       },
     });
+
+    await fetch(
+      `https://qstash.upstash.io/v2/publish/${env.WORKER_PUBLIC_URL}/webhook/occ/capture-gif`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${env.UPSTASH_QSTASH_TOKEN}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          occUUID: uuid,
+        }),
+      },
+    );
 
     return {
       id: occ.id,

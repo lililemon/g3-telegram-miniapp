@@ -26,3 +26,16 @@ memory = '1gb'
 cpu_kind = 'shared'
 cpus = 1
 processes = ['bot']
+
+# worker webservice
+[http_service]
+processes = ["worker"]
+internal_port = 3100
+force_https = true
+auto_stop_machines = false
+auto_start_machines = false
+min_machines_running = 0
+[http_service.concurrency]
+type = "requests"
+soft_limit = 200
+hard_limit = 250

@@ -18,6 +18,10 @@ export const callOrGetFromCache = async <T>(
   key: Key,
   callback: () => Promise<T>,
 ): Promise<T> => {
+  if (env.NEXT_PUBLIC_G3_ENV === "development") {
+    return callback();
+  }
+
   const cacheKey = key;
   const cacheValue = await redis.get(cacheKey);
   if (cacheValue) {

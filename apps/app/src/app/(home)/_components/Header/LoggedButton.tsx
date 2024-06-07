@@ -1,24 +1,26 @@
 "use client";
 import { Avatar, DropdownMenu } from "@radix-ui/themes";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { usePostHog } from "posthog-js/react";
-import { z } from "zod";
 import { api } from "../../../../trpc/react";
 import { useIsAuthenticated } from "../../../_providers/useAuth";
-
-const pointSchema = z.number().nonnegative();
 
 function UserMenu() {
   const { isAuthenticated } = useIsAuthenticated();
   const { data: user } = api.auth.getCurrentUser.useQuery(undefined, {
     enabled: isAuthenticated,
   });
+  const router = useRouter();
   const posthog = usePostHog();
 
   return (
     user?.displayName && (
       <DropdownMenu.Root>
         <Link
+          onMouseEnter={() => {
+            router.prefetch("/profile");
+          }}
           href="/profile"
           className="flex cursor-pointer items-center gap-3"
           onClick={() => {

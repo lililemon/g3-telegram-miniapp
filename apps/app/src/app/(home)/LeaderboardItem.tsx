@@ -1,8 +1,10 @@
 "use client";
 import { Avatar, Skeleton } from "@radix-ui/themes";
 import { formatTonAddress } from "@repo/utils";
+import Link from "next/link";
 
 export const LeaderboardItem = ({
+  occId,
   rank,
   occImageUrl,
   avatarUrl,
@@ -10,6 +12,7 @@ export const LeaderboardItem = ({
   shareCount,
   address,
 }: {
+  occId: number;
   rank: number;
   occImageUrl: string;
   avatarUrl: string | null;
@@ -24,13 +27,14 @@ export const LeaderboardItem = ({
           {rank}
         </div>
 
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <Avatar
-          fallback="?"
-          className="ml-2 mt-2 aspect-square h-28 w-28 rounded-xl bg-contain"
-          src={occImageUrl}
-          alt="occ"
-        />
+        <Link href={`/occ/${occId}`}>
+          <Avatar
+            fallback="?"
+            className="ml-2 mt-2 aspect-square h-28 w-28 rounded-xl bg-contain"
+            src={occImageUrl}
+            alt="occ"
+          />
+        </Link>
       </div>
 
       <div>

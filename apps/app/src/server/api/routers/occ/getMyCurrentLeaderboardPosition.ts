@@ -11,16 +11,24 @@ export const getMyCurrentLeaderboardPosition = protectedProcedure
       shareCount: z.number(),
       username: z.string(),
       address: z.string(),
+      occId: z.number(),
     }),
   )
-
   .query(async ({ ctx: { session } }) => {
-    const { address, avatarUrl, occImageUrl, rank, shareCount, username } =
-      await LeaderboardService.getInstance().getMyCurrentLeaderboardPosition({
-        userId: session.userId,
-      });
+    const {
+      address,
+      avatarUrl,
+      occImageUrl,
+      rank,
+      shareCount,
+      username,
+      occId,
+    } = await LeaderboardService.getInstance().getMyCurrentLeaderboardPosition({
+      userId: session.userId,
+    });
 
     return {
+      occId,
       avatarUrl,
       occImageUrl,
       rank,

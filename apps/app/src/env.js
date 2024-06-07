@@ -27,6 +27,16 @@ export const env = createEnv({
       .default(
         "AZz6ASQgMzQ5NmRmNGYtNTBiMC00MWE0LTkyNDktOGMxODFmNWQyMmI4MGY5MjVjZmY3N2RhNDg4NzgzNmM0MDNkYjA3Nzg3ODU=",
       ),
+
+    UPSTASH_QSTASH_TOKEN: z
+      .string()
+      .default(
+        "eyJVc2VySUQiOiJlODdmNTIwNS1mOTQxLTRlZDgtYjRhNS0wMTljNmMwZjZmZDEiLCJQYXNzd29yZCI6IjZlZDE2YWZmYzJjNDQxMDBiMTc3MzNlZThjNzM2NTA1In0",
+      ),
+    WORKER_PUBLIC_URL: z
+      .string()
+      .url()
+      .default("https://telegram-miniapp.fly.dev"),
   },
 
   /**
@@ -82,6 +92,8 @@ export const env = createEnv({
     TON_API_KEY: process.env.TON_API_KEY,
     UPSTASH_REDIS_REST_URL: process.env.UPSTASH_REDIS_REST_URL,
     UPSTASH_REDIS_REST_TOKEN: process.env.UPSTASH_REDIS_REST_TOKEN,
+    UPSTASH_QSTASH_TOKEN: process.env.UPSTASH_QSTASH_TOKEN,
+    WORKER_PUBLIC_URL: process.env.WORKER_PUBLIC_URL,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

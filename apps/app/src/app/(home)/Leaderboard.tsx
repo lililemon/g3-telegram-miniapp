@@ -54,6 +54,7 @@ export const Leaderboard = () => {
         ?.map(({ data: page }, pageIndex) =>
           page.map((item, index) => (
             <LeaderboardItem
+              occId={item.id}
               key={index}
               rank={pageIndex * LIMIT + index + 1}
               occImageUrl={(IMAGES.MOCK_OCC as any)[(index % 5) + 1]}

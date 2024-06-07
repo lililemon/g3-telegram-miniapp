@@ -14,7 +14,13 @@ export const Header = () => {
   return (
     <Flex justify="between" gap="2" align="center" className="relative z-50">
       <Link href="/">
-        <Image src="/images/logo.png" alt="logo" width={115} height={36} />
+        <Image
+          src="/images/logo.png"
+          alt="logo"
+          width={115}
+          height={36}
+          priority={true}
+        />
       </Link>
 
       {isAuthenticated ? (

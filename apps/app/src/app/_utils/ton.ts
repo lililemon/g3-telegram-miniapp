@@ -91,7 +91,7 @@ export async function getTxByBOC(
       }
       throw new Error("Transaction not found");
     },
-    { retries: 30, delay: 1000 },
+    { retries: 300, delay: 1000 },
   );
 }
 

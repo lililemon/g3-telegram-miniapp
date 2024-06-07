@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpException } from '@nestjs/common';
+import { Body, Controller, Get, HttpException, Post } from '@nestjs/common';
 import { z, ZodError } from 'zod';
 import { AppService } from './app.service.js';
 import { db } from './db.js';
@@ -17,7 +17,7 @@ export class AppController {
     occUUID: z.string(),
   });
 
-  @Get('/webhook/occ/capture-gif')
+  @Post('/webhook/occ/capture-gif')
   async getGif(@Body() body: any) {
     try {
       // TODO: validate upstash signature

@@ -82,10 +82,10 @@ export const TemplateInfo = () => {
           Created by:
         </div>
         <Avatar
-          fallback={occ?.Provider.User.displayName ?? ""}
+          fallback={occ?.Provider.User.displayName?.[0] ?? "?"}
           alt="User"
           className="h-6 w-6 rounded"
-          src={`https://api.dicebear.com/8.x/micah/svg?seed=${occ?.Provider.User.id}`}
+          src={occ?.Provider.User.avatarUrl ?? undefined}
         />
 
         <Skeleton loading={isPending} width="100px" height="20px">

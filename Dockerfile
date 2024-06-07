@@ -64,8 +64,8 @@ RUN npm install -g pnpm
 COPY --from=installer /app .
 WORKDIR /app/apps/worker
 
-RUN pnpm playwright install-deps
-RUN pnpm playwright install --with-deps chromium
+RUN pnpm playwright install-deps && \
+    pnpm playwright install --with-deps chromium 
 
 EXPOSE 3100
 CMD pnpm --filter "${APP_NAME}" run start

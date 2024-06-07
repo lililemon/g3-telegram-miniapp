@@ -84,7 +84,7 @@ export class BotApp {
             description: `Join OCC ${occTemplate.name}`,
             input_message_content: {
               message_text: `
-@${ctx.inlineQuery.from.username}: Good morning 🌞, join OCC ${occTemplate.name} now\! 🚀
+@${ctx.inlineQuery.from.username}: Good morning 🌞, join OCC ${occTemplate.name} now\\! 🚀
                     `,
               link_preview_options: {
                 prefer_large_media: true,

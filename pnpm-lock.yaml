@@ -107,6 +107,9 @@ importers:
       '@upstash/redis':
         specifier: ^1.31.3
         version: 1.31.3
+      axios:
+        specifier: ^1.7.2
+        version: 1.7.2
       database:
         specifier: workspace:*
         version: link:../../packages/database

@@ -61,16 +61,13 @@ RUN npm install -g pnpm
 # RUN addgroup --system --gid 1001 expressjs
 # RUN adduser --system --uid 1001 expressjs
 
-# USER expressjs
 COPY --from=installer /app .
-WORKDIR /app/packages/worker
+WORKDIR /app/apps/worker
 
-# install playwright dependencies
-RUN pnpm exec playwright install --with-deps chromium
 RUN pnpm playwright install-deps
+RUN pnpm playwright install --with-deps chromium
 
-WORKDIR /app
-# TODO: Maybe use the npm script?
+EXPOSE 3100
 CMD pnpm --filter "${APP_NAME}" run start
 
 FROM base AS my-node-app

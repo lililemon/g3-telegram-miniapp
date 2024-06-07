@@ -8,11 +8,16 @@ import { Mousewheel, Navigation, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { api } from "../../../../trpc/react";
 import { Drawer, DrawerContent, DrawerFooter } from "../../_components/Drawer";
+import { TestOccTemplate } from "../../rive/TestOccTemplate";
 import styles from "./TemplateInfo.module.scss";
 import { IconTime } from "./_components/IconTime";
 import { IconUser } from "./_components/IconUser";
 
 export const TemplateInfo = () => {
+  const [shouldRecord] = useQueryState(
+    "record",
+    parseAsBoolean.withDefault(false),
+  );
   const { id } = useParams<{ id: string }>();
   const {
     data: occ,
@@ -55,11 +60,12 @@ export const TemplateInfo = () => {
         {images.map((image, index) => (
           <SwiperSlide key={index} className="rounded-xl bg-neutral-300">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            {/* <img
               className="aspect-square w-full rounded-xl"
               src={image}
               alt="Template Image"
-            />
+            /> */}
+            <TestOccTemplate shouldRecord={shouldRecord} />
           </SwiperSlide>
         ))}
       </Swiper>

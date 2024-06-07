@@ -12,7 +12,7 @@ export const TestOccTemplate = ({
   shouldRecord?: boolean;
 }) => {
   const [images, setImages] = useState<string[]>([]);
-  const interval = useRef<Timer>();
+  const interval = useRef<ReturnType<typeof setInterval>>();
   const setRenderImage = useRef<(imgUrl: string) => void>();
   const [recording, setRecording] = useState<"idle" | "recording" | "done">(
     "idle",

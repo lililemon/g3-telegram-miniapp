@@ -1,23 +1,22 @@
 import { tryNTimes } from "@repo/utils";
 import { TRPCError } from "@trpc/server";
-import axios from "axios";
 import { Prisma } from "database";
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 import { getNFTIdAndOwnerFromTx } from "../../../../app/_utils/ton";
 import { env } from "../../../../env";
 import { db } from "../../../db";
+import { pushToQueue, QUEUE_NAME } from "../../services/upstash";
 import { protectedProcedure } from "../../trpc";
 
 // move to worker (later)
 export const createOCC = protectedProcedure
   .input(
     z.object({
-      occTemplateId: z.number(),
       txHash: z.string().min(64).max(64),
     }),
   )
-  .mutation(async ({ ctx: { session }, input: { occTemplateId, txHash } }) => {
+  .mutation(async ({ ctx: { session }, input: { txHash } }) => {
     // validate txHash
     const rawData = await tryNTimes({
       toTry: () =>
@@ -95,27 +94,21 @@ export const createOCC = protectedProcedure
     const uuid = uuidv4();
     const occ = await db.occ.create({
       data: {
-        occTemplateId,
+        txHash,
         providerId,
         nftAddress,
         uuid,
       },
     });
 
-    const urlToFetch = `https://qstash.upstash.io/v2/publish/${env.WORKER_PUBLIC_URL}/webhook/occ/capture-gif`;
-
-    await axios.post(
-      urlToFetch,
-      {
-        occUUID: uuid,
+    const urlToFetch = `${env.WORKER_PUBLIC_URL}/webhook/occ/capture-gif`;
+    await pushToQueue(QUEUE_NAME.OCC_CAPTURE_GIF, {
+      url: urlToFetch,
+      body: { occUUID: uuid },
+      headers: {
+        "Content-Type": "application/json",
       },
-      {
-        headers: {
-          Authorization: `Bearer ${env.UPSTASH_QSTASH_TOKEN}`,
-          "Content-Type": "application/json",
-        },
-      },
-    );
+    });
 
     return {
       id: occ.id,

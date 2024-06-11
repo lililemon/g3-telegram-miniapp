@@ -1,8 +1,8 @@
 "use client";
-import { Button, Spinner, Text } from "@radix-ui/themes";
-import { postEvent } from "@tma.js/sdk";
+import { Button, Dialog, Heading, Spinner } from "@radix-ui/themes";
 import { useInitData } from "@tma.js/sdk-react";
 import { useRouter } from "next-nprogress-bar";
+import { parseAsInteger, useQueryState } from "nuqs";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { z } from "zod";
@@ -11,8 +11,10 @@ import { OccType } from "../../../server/api/routers/occ/OccType";
 import { api } from "../../../trpc/react";
 import { useNftContract } from "../../_hooks/useNftContract";
 import { useIsAuthenticated } from "../../_providers/useAuth";
+import { mapStickerTypeToTemplateComponent } from "../_components/_templates";
 import { IconLock } from "../templates/[id]/_components/IconLock";
 import { MOCK_TX_HASH } from "./MOCK_TX_HASH";
+import { useWebAppSwitchInlineQuery } from "./useWebAppSwitchInlineQuery";
 
 export const MintOCC = () => {
   const { sendMintNftFromFaucet } = useNftContract();
@@ -23,73 +25,69 @@ export const MintOCC = () => {
   const { data: occ, isPending } = api.occ.getOcc.useQuery(undefined, {
     enabled: isAuthenticated,
   });
-  const { mutateAsync: unlockSticker } =
-    api.sticker.unlockSticker.useMutation();
   const { data: stickers } = api.sticker.getStickers.useQuery(undefined, {
     enabled: isAuthenticated,
   });
   const initData = useInitData(true);
+  const [stickerId, setStickerId] = useQueryState("stickerId", parseAsInteger);
+  const { postSwitchInlineQuery } = useWebAppSwitchInlineQuery();
 
   if (isPending) return <Spinner mx="auto" />;
 
   return occ ? (
     <div>
-      <Text>You are already minted OCC ({occ.id})</Text>
-      <br />
-
-      <Button
-        onClick={() => {
-          return toast.promise(
-            unlockSticker({
-              stickerType: "Sample1",
-              occId: occ.id,
-            }),
-            {
-              error: (e) => {
-                console.log(`Failed to unlock sticker:`, e);
-                return "Failed to unlock sticker";
-              },
-              loading: "Unlocking sticker...",
-              success: () => "Sticker unlocked",
-            },
-          );
-        }}
-      >
-        Unlock Sample1 Sticker
-      </Button>
+      <Heading>Sticker List</Heading>
 
       {stickers && stickers.length > 0 && (
-        <div className="mt-4 flex flex-wrap gap-4">
+        <div className="mt-2 grid grid-cols-1">
           {stickers.map((sticker) => (
-            <div key={sticker.id} className="flex flex-col items-center gap-2">
-              <div className="flex aspect-square w-20 items-center justify-center rounded-xl border bg-gray-200">
-                <Text>{sticker.stickerType}</Text>
+            <div
+              key={sticker.id}
+              onClick={() => {
+                void setStickerId(sticker.id);
+              }}
+            >
+              <div className="aspect-square cursor-pointer">
+                {mapStickerTypeToTemplateComponent(sticker.stickerType)}
               </div>
-
-              <Button
-                onClick={() => {
-                  const { id, telegramUserId } = z
-                    .object({
-                      id: z.string(),
-                      telegramUserId: z.coerce.number(),
-                    })
-                    .parse({
-                      id: sticker.id,
-                      telegramUserId: initData?.user?.id,
-                    });
-
-                  postEvent("web_app_switch_inline_query", {
-                    query: `${id} ${telegramUserId}`,
-                    chat_types: ["channels", "groups", "users"],
-                  });
-                }}
-              >
-                Share
-              </Button>
             </div>
           ))}
         </div>
       )}
+
+      <Dialog.Root
+        open={stickerId !== null}
+        onOpenChange={(open) => {
+          if (!open) {
+            void setStickerId(null);
+          }
+        }}
+      >
+        <Dialog.Content className="container">
+          <div className="flex justify-center">
+            <Button
+              mt="2"
+              size="4"
+              onClick={() => {
+                const { telegramUserId } = z
+                  .object({
+                    telegramUserId: z.coerce.number(),
+                  })
+                  .parse({
+                    telegramUserId: initData?.user?.id,
+                  });
+
+                postSwitchInlineQuery({
+                  query: `${stickerId} ${telegramUserId}`,
+                  chatTypes: ["channels", "groups", "users"],
+                });
+              }}
+            >
+              Share
+            </Button>
+          </div>
+        </Dialog.Content>
+      </Dialog.Root>
     </div>
   ) : (
     <Button

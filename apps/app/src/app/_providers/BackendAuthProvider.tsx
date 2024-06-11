@@ -38,7 +38,8 @@ export const BackendAuthProvider = ({
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
       reset();
-      void tonConnectUI.disconnect();
+
+      if (tonConnectUI.connected) void tonConnectUI.disconnect();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated, isLoading]);

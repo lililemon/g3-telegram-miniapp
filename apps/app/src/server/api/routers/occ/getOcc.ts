@@ -77,12 +77,27 @@ export const getOcc = protectedProcedure.query(
         },
       },
     });
-    const shareCount = result.shareCount;
-    const totalShare = partnerShare + shareCount;
+
+    const {
+      _sum: { shareCount },
+    } = await db.sticker.aggregate({
+      where: {
+        GMSymbolOCC: {
+          Occ: {
+            providerId,
+          },
+        },
+      },
+      _sum: {
+        shareCount: true,
+      },
+    });
+    const totalShare = shareCount ?? 0;
 
     return {
       ...result,
       totalReaction: totalReaction._sum.count ?? 0,
+      partnerShare,
       reactions,
       totalShare,
     };

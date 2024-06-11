@@ -25,7 +25,6 @@ export class LeaderboardService {
         {
           id: number;
           shareCount: bigint;
-          totalShareCount: bigint;
           userId: number;
           displayName: string;
           avatarUrl: string;
@@ -35,7 +34,6 @@ export class LeaderboardService {
             SELECT 
               "Sticker".id,
               COUNT("Share".id) as "shareCount",
-              ("Sticker"."shareCount" + COUNT("Share".id)) as "totalShareCount",
               "User".id as "userId",
               "User"."displayName" as "displayName",
               "User"."avatarUrl" as "avatarUrl",
@@ -48,14 +46,13 @@ export class LeaderboardService {
             JOIN "User" ON "Provider"."userId" = "User".id 
             WHERE "Provider"."value" IS NOT NULL AND "Provider"."type" = ${ProviderType.TON_WALLET}::"ProviderType"
             GROUP BY "Sticker".id, "User".id, "Provider"."value"
-            ORDER BY "totalShareCount" DESC`;
+            ORDER BY "shareCount" DESC`;
 
       return {
         data: sortByShareCount.map((item) => ({
           ...item,
           // map from bigint to number
           shareCount: Number(item.shareCount),
-          totalShareCount: Number(item.totalShareCount),
         })),
         total: sortByShareCount.length,
       };
@@ -89,7 +86,7 @@ export class LeaderboardService {
       avatarUrl: item.avatarUrl,
       occImageUrl: "",
       rank: rank + 1,
-      shareCount: item.totalShareCount,
+      shareCount: item.shareCount,
       username: item.displayName,
       address,
     };

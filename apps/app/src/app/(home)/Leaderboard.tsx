@@ -60,7 +60,7 @@ export const Leaderboard = () => {
               occImageUrl={(IMAGES.MOCK_OCC as any)[(index % 5) + 1]}
               avatarUrl={item.avatarUrl}
               username={item.displayName ?? "?"}
-              shareCount={item.totalShareCount}
+              shareCount={item.shareCount}
               address={item.address}
             />
           )),

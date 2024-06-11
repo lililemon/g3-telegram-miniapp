@@ -41,14 +41,6 @@ export const Sample1 = memo(
       autoplay: true,
       assetLoader: (_asset, bytes) => {
         const asset = _asset;
-        console.log("Asset properties to query", {
-          name: asset.name,
-          fileExtension: asset.fileExtension,
-          cdnUuid: asset.cdnUuid,
-          isFont: asset.isFont,
-          isImage: asset.isImage,
-          bytes,
-        });
 
         // If the asset has a `cdnUuid`, return false to let the runtime handle
         // loading it in from a CDN. Or if there are bytes found for the asset

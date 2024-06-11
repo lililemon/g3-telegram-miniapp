@@ -125,7 +125,7 @@ export const MintOCC = () => {
         setIsLoading(true);
         try {
           const txHash =
-            env.NODE_ENV === "development"
+            env.NEXT_PUBLIC_G3_ENV === "development"
               ? MOCK_TX_HASH
               : await sendMintNftFromFaucet({
                   name: "Name Of NFT #6",

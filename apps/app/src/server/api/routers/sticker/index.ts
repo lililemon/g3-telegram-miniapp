@@ -29,10 +29,15 @@ export const stickerRouter = createTRPCRouter({
             data: {
               stickerType,
               GMSymbolOCC: {
-                create: {
-                  Occ: {
-                    connect: {
-                      id: occId,
+                connectOrCreate: {
+                  where: {
+                    occId,
+                  },
+                  create: {
+                    Occ: {
+                      connect: {
+                        id: occId,
+                      },
                     },
                   },
                 },

@@ -39,7 +39,7 @@ export const MintOCC = () => {
       <Heading>Sticker List</Heading>
 
       {stickers && stickers.length > 0 && (
-        <div className="mt-2 grid grid-cols-1">
+        <div className="mt-2 grid grid-cols-3">
           {stickers.map((sticker) => (
             <div
               key={sticker.id}

@@ -165,24 +165,22 @@ export class BotApp {
       const storage = PersistentDb.getInstance();
       const { chatType } = storage.getUserData(ctx.chosenInlineResult.from.id);
 
-      if (!isChatTypeSupported(chatType)) {
-        return;
-      }
-
-      storage.appendUserData(ctx.chosenInlineResult.from.id, {
-        stickerId,
-        chatType,
-      });
-
-      // increase share
-      await db.sticker.update({
-        where: { id: stickerId },
-        data: {
-          shareCount: {
-            increment: 1,
+      if (isChatTypeSupported(chatType)) {
+        storage.appendUserData(ctx.chosenInlineResult.from.id, {
+          stickerId,
+          chatType,
+        });
+      } else {
+        // increase share
+        await db.sticker.update({
+          where: { id: stickerId },
+          data: {
+            shareCount: {
+              increment: 1,
+            },
           },
-        },
-      });
+        });
+      }
     });
     bot.on("message", async (ctx) => {
       // delay 1s to make sure this callback will run after the chosen_inline_result

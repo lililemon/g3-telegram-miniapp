@@ -1,5 +1,12 @@
 "use client";
-import { Button, Dialog, Heading, Spinner } from "@radix-ui/themes";
+import {
+  Badge,
+  Button,
+  Card,
+  DataList,
+  Dialog,
+  Spinner,
+} from "@radix-ui/themes";
 import { useInitData } from "@tma.js/sdk-react";
 import { useRouter } from "next-nprogress-bar";
 import { parseAsInteger, useQueryState } from "nuqs";
@@ -36,7 +43,26 @@ export const MintOCC = () => {
 
   return occ ? (
     <div>
-      <Heading>Sticker List</Heading>
+      <Card>
+        <DataList.Root>
+          <DataList.Item align="center">
+            <DataList.Label minWidth="88px">Total share</DataList.Label>
+            <DataList.Value>
+              <Badge color="jade" variant="soft" radius="full">
+                {occ.totalShare}
+              </Badge>
+            </DataList.Value>
+          </DataList.Item>
+          <DataList.Item align="center">
+            <DataList.Label minWidth="88px">Total reactions</DataList.Label>
+            <DataList.Value>
+              <Badge color="jade" variant="soft" radius="full">
+                {occ.totalReaction}
+              </Badge>
+            </DataList.Value>
+          </DataList.Item>
+        </DataList.Root>
+      </Card>
 
       {stickers && stickers.length > 0 && (
         <div className="mt-2 grid grid-cols-2">

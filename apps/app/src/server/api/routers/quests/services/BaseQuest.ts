@@ -1,6 +1,6 @@
+import { type QuestId } from "@repo/types";
 import { TRPCError } from "@trpc/server";
-import { RewardService } from "../../reward";
-import { type QuestId } from "./QuestId";
+import { rewardService } from "../../../../rewards";
 
 export interface IQuest {
   readonly id: QuestId;
@@ -57,7 +57,7 @@ export abstract class BaseQuest implements IQuest {
       });
     }
 
-    await RewardService.rewardUser({
+    await rewardService.rewardUser({
       taskId: this.id,
       userId,
     });

@@ -17,6 +17,9 @@
     "worker:dev": {
       "dependsOn": ["^dev"]
     },
+    "my-node-app#dev": {
+      "dependsOn": ["@services/rewards#build", "@repo/types#build"]
+    },
     "db:generate": {
       "cache": false
     },

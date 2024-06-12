@@ -66,6 +66,17 @@ export const updateDisplayName = protectedProcedure
       if (!displayName) delete toUpdate.displayName;
       if (!toUpdate.avatarUrl) delete toUpdate.avatarUrl;
 
+      if (telegramId) {
+        await db.user.updateMany({
+          where: {
+            telegramId: telegramId.toString(),
+          },
+          data: {
+            telegramId: null,
+          },
+        });
+      }
+
       await db.user.update({
         where: {
           id: userId,

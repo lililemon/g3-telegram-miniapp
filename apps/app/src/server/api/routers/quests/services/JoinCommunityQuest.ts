@@ -1,13 +1,13 @@
+import { QuestId } from "@repo/types";
 import { TRPCError } from "@trpc/server";
 import { env } from "../../../../../env";
 import { db } from "../../../../db";
 import { BaseQuest } from "./BaseQuest";
-import { QuestId } from "./QuestId";
 import { telegramInstance } from "./telegramInstance";
 
 export class JoinCommunityTask extends BaseQuest {
   id = QuestId.JOIN_COMMUNITY;
-  points = 200;
+  points = 50;
   description = "Join the community to earn points";
   text = "Join now";
 

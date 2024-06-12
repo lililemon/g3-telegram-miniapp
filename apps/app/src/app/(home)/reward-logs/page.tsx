@@ -1,12 +1,12 @@
 "use client";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { Spinner } from "@radix-ui/themes";
+import { mapQuestIdToTitle } from "@repo/types";
 import { formatNumber } from "@repo/utils";
 import { format } from "date-fns";
 import groupBy from "lodash-es/groupBy";
 import { Suspense, useEffect, useMemo } from "react";
 import { useInView } from "react-intersection-observer";
-import { mapQuestIdToTitle } from "../../../server/api/routers/quests/services/QuestId";
 import { api } from "../../../trpc/react";
 import { useIsAuthenticated } from "../../_providers/useAuth";
 import { IconTime } from "./_icon/IconTime";

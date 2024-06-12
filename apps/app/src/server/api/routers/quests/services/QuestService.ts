@@ -1,9 +1,10 @@
+import { type QuestId, mapQuestIdToTitle } from "@repo/types";
 import { TRPCError } from "@trpc/server";
 import PostHogClient, { Flag } from "../../../services/posthog";
 import { type IQuest } from "./BaseQuest";
 import { BindWalletAddressTask } from "./BindWalletAddressTask";
 import { JoinCommunityTask } from "./JoinCommunityQuest";
-import { mapQuestIdToTitle, type QuestId } from "./QuestId";
+import { MintGMEpicQuest } from "./MintGMEpicQuest";
 import { QuestStatus } from "./QuestStatus";
 
 export class QuestService {
@@ -20,7 +21,10 @@ export class QuestService {
   private constructor() {}
 
   private async _getTasks({ userId }: { userId: number }) {
-    const _tasks: IQuest[] = [new BindWalletAddressTask()];
+    const _tasks: IQuest[] = [
+      new BindWalletAddressTask(),
+      new MintGMEpicQuest(),
+    ];
 
     const client = PostHogClient();
     if (await client.isFeatureEnabled(Flag.join_g3_community, "default")) {
@@ -84,7 +88,8 @@ export class QuestService {
       filteredTasks.map(async ({ task, isRewardAlreadyGiven, metadata }) => {
         // Avoid calling isFinishedQuest if the task is already claimed
         const isFinishedQuest =
-          isRewardAlreadyGiven || (await task.isUserFinishedQuest({ userId }));
+          isRewardAlreadyGiven ||
+          (await task.isUserFinishedQuest({ userId }).catch(() => false));
 
         return {
           id: task.id,

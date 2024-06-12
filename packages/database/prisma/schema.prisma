@@ -29,6 +29,8 @@ model RewardLogs {
     point  Int
     userId Int
 
+    metadata Json?
+
     @@index([userId])
 }
 

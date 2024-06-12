@@ -1,11 +1,11 @@
 "use client";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { Spinner } from "@radix-ui/themes";
+import { QuestId } from "@repo/types";
 import { TRPCClientError } from "@trpc/client";
 import { useCallback } from "react";
 import toast from "react-hot-toast";
 import { z } from "zod";
-import { QuestId } from "~/server/api/routers/quests/services/QuestId";
 import { QuestStatus } from "~/server/api/routers/quests/services/QuestStatus";
 import { api } from "../../../trpc/react";
 import { LoggedUserOnly } from "../_components/LoggedUserOnly";

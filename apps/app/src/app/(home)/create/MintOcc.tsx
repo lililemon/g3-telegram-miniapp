@@ -23,6 +23,10 @@ import { IconLock } from "../templates/[id]/_components/IconLock";
 import { MOCK_TX_HASH } from "./MOCK_TX_HASH";
 import { useWebAppSwitchInlineQuery } from "./useWebAppSwitchInlineQuery";
 
+export const withProxy = (url: string) => {
+  return `/api/proxy?url=${encodeURIComponent(url)}`;
+};
+
 export const MintOCC = () => {
   const { sendMintNftFromFaucet } = useNftContract();
   const router = useRouter();
@@ -65,7 +69,7 @@ export const MintOCC = () => {
       </Card>
 
       {stickers && stickers.length > 0 && (
-        <div className="mt-2 grid grid-cols-2">
+        <div className="mt-2 grid ">
           {stickers.map((sticker) => (
             <div
               key={sticker.id}
@@ -74,7 +78,11 @@ export const MintOCC = () => {
               }}
             >
               <div className="aspect-square cursor-pointer">
-                {mapStickerTypeToTemplateComponent(sticker.stickerType)}
+                {mapStickerTypeToTemplateComponent(sticker.stickerType, {
+                  imageUrl: withProxy(
+                    `https://s.getgems.io/nft/c/626e630d4c1921ba7a0e3b4e/2041/image.png`,
+                  ),
+                })}
               </div>
             </div>
           ))}

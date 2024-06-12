@@ -1,4 +1,4 @@
-import { mapStickerTypeToStickerTemplate } from "@repo/types";
+import { mapStickerTypeToStickerTemplate, QuestId } from "@repo/types";
 import { Prisma } from "database";
 import { Telegraf } from "telegraf";
 import { InputTextMessageContent } from "telegraf/types";
@@ -9,6 +9,7 @@ import { isChatTypeSupported } from "./constants";
 import { env } from "./env";
 import { parseInlineQuerySchema } from "./schema/parseInlineQuerySchema";
 import { db } from "./utils/db";
+import { rewardService } from "./utils/reward";
 
 export class BotApp {
   private static instance: BotApp;
@@ -49,27 +50,17 @@ export class BotApp {
         const { query, from, chat_type } = ctx.inlineQuery;
         const [_id, _telegramUserId] = query.split(" ");
 
+        // Validate inputs
         console.log({
           _id,
           _telegramUserId,
         });
-
-        const { stickerId, telegramUserId } = parseInlineQuerySchema({
+        const { stickerId } = parseInlineQuerySchema({
           stickerId: _id,
-          telegramUserId: _telegramUserId,
         });
-
-        if (telegramUserId !== from.id) {
-          console.log(
-            `[MY NODE APP] telegramUserId not match, ID: ${telegramUserId}, from.id: ${from.id}`
-          );
-          return;
-        }
-
         const sticker = await db.sticker.findUnique({
           where: { id: stickerId },
         });
-
         if (!sticker) {
           console.log(`[MY NODE APP] Sticker not found, ID: ${stickerId}`);
           return;
@@ -82,7 +73,7 @@ export class BotApp {
           return;
         }
 
-        // update user data
+        // Main flow
         console.log(`[MY NODE APP] Append user data`, {
           stickerId,
           chatType: chat_type,
@@ -92,7 +83,6 @@ export class BotApp {
           chatType: ctx.inlineQuery.chat_type,
         });
 
-        // Explicit usage
         await ctx.telegram.answerInlineQuery(
           ctx.inlineQuery.id,
           [
@@ -104,7 +94,6 @@ export class BotApp {
                 "https://www.gall3ry.io/assets/landing/union/gall3ry-logo-squared.png",
               description:
                 mapStickerTypeToStickerTemplate[stickerType].description,
-
               input_message_content: {
                 message_text: "Good morning",
                 link_preview_options: {
@@ -141,44 +130,111 @@ export class BotApp {
       const { query } = ctx.chosenInlineResult;
       const [_id, _telegramUserId] = query.split(" ");
 
-      const { stickerId, telegramUserId } = parseInlineQuerySchema({
+      // Validate inputs
+      const { stickerId } = parseInlineQuerySchema({
         stickerId: _id,
-        telegramUserId: _telegramUserId,
       });
-
-      if (telegramUserId !== ctx.chosenInlineResult.from.id) {
-        console.log(
-          `[MY NODE APP] telegramUserId not match, ID: ${telegramUserId}, from.id: ${ctx.chosenInlineResult.from.id}`
-        );
-        return;
-      }
-
       const sticker = await db.sticker.findUnique({
         where: { id: stickerId },
       });
-
       if (!sticker) {
         console.log(`[MY NODE APP] Sticker not found, ID: ${stickerId}`);
         return;
       }
-
       const storage = PersistentDb.getInstance();
       const { chatType } = storage.getUserData(ctx.chosenInlineResult.from.id);
+      if (!isChatTypeSupported(chatType)) return;
 
-      if (isChatTypeSupported(chatType)) {
-        storage.appendUserData(ctx.chosenInlineResult.from.id, {
-          stickerId,
-          chatType,
-        });
-      } else {
-        // increase share
-        await db.sticker.update({
-          where: { id: stickerId },
-          data: {
-            shareCount: {
-              increment: 1,
+      const user = await db.user.findFirst({
+        where: {
+          Provider: {
+            some: {
+              Occ: {
+                some: {
+                  GMSymbolOCC: {
+                    Sticker: {
+                      some: {
+                        id: stickerId,
+                      },
+                    },
+                  },
+                },
+              },
             },
           },
+        },
+      });
+
+      // 2 cases here
+      const isOwner =
+        user?.telegramId && +user.telegramId === ctx.chosenInlineResult.from.id;
+
+      if (isOwner) {
+        await rewardOwner({
+          userId: user.id,
+        });
+      } else {
+        await rewardSharerAndOwner();
+      }
+
+      storage.appendUserData(ctx.chosenInlineResult.from.id, {
+        stickerId,
+        chatType,
+      });
+      await db.sticker.update({
+        where: { id: stickerId },
+        data: {
+          shareCount: {
+            increment: 1,
+          },
+        },
+      });
+
+      async function rewardSharerAndOwner() {
+        const sharer = await db.user.findFirstOrThrow({
+          where: {
+            telegramId: ctx.chosenInlineResult.from.id.toString(),
+          },
+        });
+        // create account for user
+        // reward for sharer
+        if (!sharer) {
+          const newSharer = await db.user.create({
+            data: {
+              telegramId: ctx.chosenInlineResult.from.id.toString(),
+            },
+          });
+
+          if (!user?.id) {
+            console.log(`[CRITICAL] Owner of the sticker not found`);
+            return;
+          }
+
+          await Promise.all([
+            rewardService.rewardUser({
+              taskId: QuestId.SHARING_FRIEND_STICKER,
+              userId: newSharer.id,
+              metadata: ctx.chosenInlineResult as unknown as Prisma.JsonObject,
+            }),
+            rewardService.rewardUser({
+              taskId: QuestId.POINT_RECEIVED_FROM_FRIEND,
+              userId: user.id,
+              metadata: ctx.chosenInlineResult as unknown as Prisma.JsonObject,
+            }),
+          ]);
+        } else {
+          await rewardService.rewardUser({
+            taskId: QuestId.SHARING_FRIEND_STICKER,
+            userId: sharer.id,
+            metadata: ctx.chosenInlineResult as unknown as Prisma.JsonObject,
+          });
+        }
+      }
+
+      async function rewardOwner({ userId }: { userId: number }) {
+        await rewardService.rewardUser({
+          userId,
+          taskId: QuestId.SHARING_MY_STICKER,
         });
       }
     });

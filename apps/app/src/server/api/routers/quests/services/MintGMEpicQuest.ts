@@ -2,17 +2,24 @@ import { QuestId } from "@repo/types";
 import { db } from "../../../../db";
 import { BaseQuest } from "./BaseQuest";
 
-export class BindWalletAddressTask extends BaseQuest {
-  id = QuestId.BIND_WALLET_ADDRESS;
+export class MintGMEpicQuest extends BaseQuest {
+  id = QuestId.MINT_GM_EPIC_QUEST;
   points = 100;
-  description = "Quest description and instruction details goes here.";
+  description = "Mint GM Epic Quest";
+  text = "Mint GM Epic Quest";
 
   async isUserFinishedQuest({ userId }: { userId: number }): Promise<boolean> {
-    const provider = await db.provider.findFirst({
-      where: { id: userId, type: "TON_WALLET" },
+    const gmOCC = await db.gMSymbolOCC.findFirst({
+      where: {
+        Occ: {
+          Provider: {
+            userId,
+          },
+        },
+      },
     });
 
-    return !!provider;
+    return !!gmOCC;
   }
 
   async isRewardAlreadyGiven({ userId }: { userId: number }): Promise<boolean> {
@@ -26,7 +33,7 @@ export class BindWalletAddressTask extends BaseQuest {
     return !!result;
   }
 
-  async getQuestMetadata(): Promise<Record<string, unknown>> {
+  async getQuestMetadata() {
     return {};
   }
 }

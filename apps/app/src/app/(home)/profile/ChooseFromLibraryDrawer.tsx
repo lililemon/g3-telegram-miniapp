@@ -50,7 +50,7 @@ export const ChooseFromLibraryDrawer = ({ photoFile }: { photoFile: File }) => {
               <Cropper
                 image={image}
                 classes={{
-                  cropAreaClassName: "rounded-2xl !border-4 !border-[#DAF200]",
+                  cropAreaClassName: "rounded-2xl !border-4 !border-[#14DB60]",
                 }}
                 showGrid={false}
                 crop={crop}

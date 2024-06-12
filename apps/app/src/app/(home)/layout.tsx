@@ -1,5 +1,6 @@
 "use client";
 import { Box } from "@radix-ui/themes";
+import { cn } from "@repo/utils";
 import {
   mockTelegramEnv,
   parseInitData,
@@ -68,6 +69,11 @@ if (typeof window !== "undefined") {
   }
 }
 
+const fluidPages: RegExp[] = [
+  // /create
+  /\/create\/?/,
+];
+
 export default function RootLayout({
   children,
 }: {
@@ -89,7 +95,13 @@ export default function RootLayout({
           <Header />
         </div>
 
-        <div className="flex min-h-[82vh] flex-col p-4">{children}</div>
+        <div
+          className={cn("flex min-h-[82vh] flex-col p-4", {
+            "p-0": fluidPages.some((re) => re.test(pathname)),
+          })}
+        >
+          {children}
+        </div>
 
         <Footer />
       </Box>

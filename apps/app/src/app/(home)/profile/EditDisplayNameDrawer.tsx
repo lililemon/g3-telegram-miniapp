@@ -78,7 +78,7 @@ export const EditDisplayNameDrawer = () => {
                     <TextField.Root
                       placeholder="Enter your name"
                       className={cn(
-                        "h-[48px] rounded-lg px-4 py-3 text-base font-medium leading-normal tracking-tight text-slate-900 outline-[#DAF200]",
+                        "h-[48px] rounded-lg px-4 py-3 text-base font-medium leading-normal tracking-tight text-slate-900 outline-[#14DB60]",
                         {
                           "outline-red-500 ring-1 ring-red-500":
                             fieldState.error,

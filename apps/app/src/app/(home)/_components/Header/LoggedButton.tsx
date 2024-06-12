@@ -34,7 +34,7 @@ function UserMenu() {
               {user.displayName}
             </div>
             <Avatar
-              className="h-10 w-10 rounded-[40px] border-2 border-[#DAF200]"
+              className="h-10 w-10 rounded-[40px] border-2 border-[#14DB60]"
               src={user.avatarUrl ?? undefined}
               fallback={user.displayName?.[0] ?? "?"}
               alt="avatar"

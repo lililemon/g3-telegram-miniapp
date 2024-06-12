@@ -92,7 +92,7 @@ const Page = () => {
             </div>
 
             <div className="inline-flex h-5 items-center justify-start gap-1.5">
-              <div className="h-3 w-3 rounded-full bg-[#DAF200]" />
+              <div className="h-3 w-3 rounded-full bg-[#14DB60]" />
               <div className="text-center text-sm font-medium leading-tight tracking-tight text-[#717D00]">
                 {item.title}
               </div>
@@ -115,7 +115,7 @@ const Page = () => {
           onClick={() => {
             setSignOutDrawerOpen(true);
           }}
-          className="w-full bg-[#DAF200]"
+          className="w-full bg-[#14DB60]"
           size="4"
         >
           <div className="text-xl font-bold leading-7 text-slate-900">

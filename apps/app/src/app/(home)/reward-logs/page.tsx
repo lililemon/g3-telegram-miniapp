@@ -59,11 +59,11 @@ const Page = () => {
           Object.entries(groupByMonthYear).map(([key, logs]) => (
             <div key={key}>
               <div className="flex h-7 items-center justify-start gap-2 pb-1">
-                <div className="h-3 w-3 rounded-full bg-[#DAF200]" />
+                <div className="h-3 w-3 rounded-full bg-[#14DB60]" />
                 <div className="text-center text-base font-medium leading-normal tracking-tight text-[#717D00]">
                   {key}
                 </div>
-                <div className="h-[3px] shrink grow basis-0 rounded-xl bg-[#DAF200]" />
+                <div className="h-[3px] shrink grow basis-0 rounded-xl bg-[#14DB60]" />
               </div>
 
               {logs.map((log) => (

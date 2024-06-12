@@ -175,7 +175,7 @@ export const TemplateInfo = () => {
           </Skeleton>
 
           <div className="flex h-5 items-center justify-start gap-1.5">
-            <div className="h-3 w-3 rounded-full bg-[#DAF200]" />
+            <div className="h-3 w-3 rounded-full bg-[#14DB60]" />
             <div className="text-center text-sm font-medium leading-tight tracking-tight text-[#717D00]">
               Shares
             </div>
@@ -188,7 +188,7 @@ export const TemplateInfo = () => {
           </div>
 
           <div className="flex h-5 items-center justify-start gap-1.5">
-            <div className="h-3 w-3 rounded-full bg-[#DAF200]" />
+            <div className="h-3 w-3 rounded-full bg-[#14DB60]" />
             <div className="text-center text-sm font-medium leading-tight tracking-tight text-[#717D00]">
               Reactions
             </div>

@@ -20,13 +20,13 @@ export const Top = memo(() => {
           <div className="z-10">
             <div className="mt-8 flex flex-col items-center">
               <div className="flex h-12 items-center justify-start gap-3">
-                <div className="h-4 w-4 rounded-full bg-[#DAF200]" />
+                <div className="h-4 w-4 rounded-full bg-[#14DB60]" />
                 <div className="text-center text-4xl font-bold leading-[48px] text-slate-900">
                   Create your EPIC
                 </div>
               </div>
               <div className="flex h-12 items-center justify-start gap-3">
-                <div className="h-4 w-4 rounded-full bg-[#DAF200]" />
+                <div className="h-4 w-4 rounded-full bg-[#14DB60]" />
                 <div className="text-center text-4xl font-bold leading-[48px] text-slate-900">
                   And get $EPIC
                 </div>
@@ -48,7 +48,7 @@ export const Top = memo(() => {
       </div>
 
       <div className="my-4">
-        <div className="relative h-[120px] rounded-xl bg-[#F3FF8A] px-5 py-2.5">
+        <div className="relative h-[120px] rounded-xl bg-[#87FFB5] px-5 py-2.5">
           <div className="text-4xl font-bold leading-[44px] text-slate-900">
             1,000 $TON
           </div>
@@ -57,7 +57,7 @@ export const Top = memo(() => {
           </div>
           <div className="inline-flex items-center justify-start gap-1.5">
             <div className="h-2 w-2 rounded-full bg-lime-700" />
-            <div className="text-xs font-medium leading-[18px] tracking-tight text-lime-700">
+            <div className="text-xs font-medium leading-[18px] tracking-tight text-[#005320]">
               The leaders take it all
             </div>
           </div>

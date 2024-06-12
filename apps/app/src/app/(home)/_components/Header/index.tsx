@@ -17,9 +17,10 @@ export const Header = () => {
         <Image
           src="/images/logo.png"
           alt="logo"
-          width={115}
-          height={36}
+          width={92}
+          height={44}
           priority={true}
+          objectFit="contain"
         />
       </Link>
 

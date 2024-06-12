@@ -45,7 +45,7 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
             <BackendAuthProvider>
               {children}
 
-              <ProgressBar color="#DAF200" />
+              <ProgressBar color="#14DB60" />
             </BackendAuthProvider>
           </SDKProvider>
         </TonConnectUIProvider>

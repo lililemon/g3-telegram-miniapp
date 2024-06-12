@@ -19,7 +19,7 @@ import { api } from "../../../trpc/react";
 import { useNftContract } from "../../_hooks/useNftContract";
 import { useIsAuthenticated } from "../../_providers/useAuth";
 import { mapStickerTypeToTemplateComponent } from "../_components/_templates";
-import { IconLock } from "../templates/[id]/_components/IconLock";
+import { LeaderboardAvatar } from "../LeaderboardItem";
 import { MOCK_TX_HASH } from "./MOCK_TX_HASH";
 import { useWebAppSwitchInlineQuery } from "./useWebAppSwitchInlineQuery";
 
@@ -28,10 +28,6 @@ export const withProxy = (url: string) => {
 };
 
 export const MintOCC = () => {
-  const { sendMintNftFromFaucet } = useNftContract();
-  const router = useRouter();
-  const { mutateAsync } = api.occ.createOCC.useMutation();
-  const [isLoading, setIsLoading] = useState(false);
   const { isAuthenticated } = useIsAuthenticated();
   const { data: occ, isPending } = api.occ.getOcc.useQuery(undefined, {
     enabled: isAuthenticated,
@@ -124,62 +120,112 @@ export const MintOCC = () => {
       </Dialog.Root>
     </div>
   ) : (
-    <Button
-      radius="large"
-      size="4"
-      className="flex-1"
-      disabled={isLoading}
-      onClick={async () => {
-        setIsLoading(true);
-        try {
-          const txHash =
-            env.NEXT_PUBLIC_G3_ENV === "development"
-              ? MOCK_TX_HASH
-              : await sendMintNftFromFaucet({
-                  name: "Name Of NFT #6",
-                  description: "NFT Description",
-                  image:
-                    "ipfs://QmTPSH7bkExWcrdXXwQvhN72zDXK9pZzH3AGbCw13f6Lwx/logo.jpg",
-                });
+    <MintGMOCC />
+  );
+};
 
-          await toast.promise(
-            mutateAsync({
-              type: OccType.GMSymbolOCC,
-              txHash,
-            }),
-            {
-              loading: "Creating OCC...",
-              success: (data) => {
-                void router.replace(`/occ/${data.id}`);
+export const MintGMOCC = () => {
+  const { sendMintNftFromFaucet } = useNftContract();
+  const router = useRouter();
+  const { mutateAsync } = api.occ.createOCC.useMutation();
+  const [isLoading, setIsLoading] = useState(false);
 
-                return "OCC created";
-              },
-              error: (e) => {
-                console.log(`Failed to create OCC:`, e);
+  return (
+    <div>
+      <div className="p-4">
+        <div className="flex items-center justify-center gap-2">
+          <Button>GM</Button>
+          <Button disabled>PNL</Button>
+          <Button disabled>IDCard</Button>
+        </div>
 
-                return "Failed to create OCC";
-              },
-            },
-          );
-        } finally {
-          setIsLoading(false);
-        }
-      }}
-    >
-      <div className="flex items-center gap-2">
-        <Spinner loading={isLoading}>
-          <div className="size-6">
-            <IconLock />
+        <div className="mt-6 flex justify-center">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            className="h-[161px] w-[161px] rounded-full"
+            src="https://via.placeholder.com/161x161"
+            alt=""
+          />
+        </div>
+
+        <div className="mt-5">
+          <div className="text-center text-sm font-light leading-tight tracking-tight text-slate-700">
+            Want your own epic GM like the famous below? Let&apos;s unlock the
+            #GM now to awesomely show off your daily Web3 routine to community.
+            Mint, customize, share, collect points, and level up for your chance
+            to win the $EPIC AIRDROP (TBA){" "}
           </div>
-        </Spinner>
-        <div className="text-xl font-bold leading-7 text-slate-900">
-          Unlock this EPIC
+        </div>
+
+        <div className="mt-6">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            className="aspect-square w-full rounded-xl"
+            src="https://via.placeholder.com/335x335"
+            alt=""
+          />
+        </div>
+
+        <div className="mt-5">
+          <div className="text-center text-xl font-bold leading-7 text-slate-900">
+            Top 5 GMs
+          </div>
+        </div>
+
+        <div className="mt-4">
+          <LeaderboardAvatar
+            occId={1}
+            occImageUrl="https://via.placeholder.com/335x335"
+            rank={1}
+          />
         </div>
       </div>
 
-      <div className="grow text-right text-xl font-bold leading-7 text-slate-900">
-        0.1 $TON
+      <div className="container sticky -left-4 -right-4 bottom-20 mt-7 bg-white px-5 py-3 shadow-xl">
+        <Button
+          className="w-full"
+          size="4"
+          disabled={isLoading}
+          onClick={async () => {
+            setIsLoading(true);
+            try {
+              const txHash =
+                env.NEXT_PUBLIC_G3_ENV === "development"
+                  ? MOCK_TX_HASH
+                  : await sendMintNftFromFaucet({
+                      name: "Name Of NFT #6",
+                      description: "NFT Description",
+                      image:
+                        "ipfs://QmTPSH7bkExWcrdXXwQvhN72zDXK9pZzH3AGbCw13f6Lwx/logo.jpg",
+                    });
+
+              await toast.promise(
+                mutateAsync({
+                  type: OccType.GMSymbolOCC,
+                  txHash,
+                }),
+                {
+                  loading: "Creating OCC...",
+                  success: (data) => {
+                    void router.replace(`/occ/${data.id}`);
+
+                    return "OCC created";
+                  },
+                  error: (e) => {
+                    console.log(`Failed to create OCC:`, e);
+
+                    return "Failed to create OCC";
+                  },
+                },
+              );
+            } finally {
+              setIsLoading(false);
+            }
+          }}
+        >
+          Mint GM
+        </Button>
       </div>
-    </Button>
+    </div>
   );
 };

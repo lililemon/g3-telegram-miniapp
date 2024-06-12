@@ -10,7 +10,7 @@ export class ReactionService {
   // singleton
   private static instance: ReactionService;
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private constructor() { }
+  private constructor() {}
 
   public static getInstance(): ReactionService {
     if (!ReactionService.instance) {
@@ -146,8 +146,8 @@ export const getTopOccs = protectedProcedure
       skip: (input.page - 1) * input.limit,
       orderBy: {
         shareCount: "desc",
-      }
-    })
+      },
+    });
     console.log(`getTopOccs: ${occs.length}`);
-    return {occs}
+    return { occs };
   });

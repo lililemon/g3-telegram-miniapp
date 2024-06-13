@@ -115,13 +115,25 @@ export class AppService {
     this.logger.debug('[resetMapping] Deleted %d mappings', count);
   }
 
-  async getGif(payload: { stickerIds: number[] }) {
-    return z
+  async getGif(payload: {
+    stickerIds: number[];
+  }): Promise<{ stickerId: number; cdnUrl: string }[]> {
+    const fn = z
       .function()
       .args(
         z.object({
           stickerIds: z.array(z.number()),
         }),
+      )
+      .returns(
+        z.promise(
+          z.array(
+            z.object({
+              stickerId: z.number(),
+              cdnUrl: z.string(),
+            }),
+          ),
+        ),
       )
       .implement(async ({ stickerIds }) => {
         let browser: Browser | null = null;
@@ -175,7 +187,9 @@ export class AppService {
             await browser.close();
           }
         }
-      })(payload);
+      });
+
+    return fn(payload) as any;
   }
 
   private _uploadGif(payload: { base64: string }) {

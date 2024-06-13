@@ -18,7 +18,7 @@ worker = "pnpm --filter=worker start"
 [[vm]]
 memory = '1gb'
 cpu_kind = 'shared'
-cpus = 1
+cpus = 4
 
 # worker webservice
 [http_service]
@@ -28,3 +28,9 @@ force_https = true
 auto_stop_machines = false
 auto_start_machines = false
 min_machines_running = 0
+[[http_service.checks]]
+grace_period = "30s"
+interval = "15s"
+method = "GET"
+timeout = "10s"
+path = "/"

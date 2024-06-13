@@ -127,7 +127,6 @@ export const stickerRouter = createTRPCRouter({
           nftAddress: nft.nftAddress,
           stickerType: stickerType,
           gMSymbolOCCId: gmSymbolOCCId.id,
-          imageUrl: nft.imageUrl,
         }));
       });
 
@@ -139,7 +138,7 @@ export const stickerRouter = createTRPCRouter({
       if (env.NEXT_PUBLIC_G3_ENV !== "development") {
         const urlToFetch = `${env.WORKER_PUBLIC_URL}/webhook/sticker/capture-gif`;
         // send capturing
-        void pushToQueue(QUEUE_NAME.STICKER_CAPTURE_GIF, {
+        await pushToQueue(QUEUE_NAME.STICKER_CAPTURE_GIF, {
           body: {
             stickerIds: stickers.map((sticker) => sticker.id),
           },

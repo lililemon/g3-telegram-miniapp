@@ -70,7 +70,6 @@ export const MintOCC = () => {
   const { postSwitchInlineQuery } = useWebAppSwitchInlineQuery();
   const stickers = stickersData?.items;
   const selectedSticker = stickers?.find((s) => s.id === stickerId);
-  const [, setSelectAssetsDrawer] = useSelectAssetsForGMDrawer();
   const [showRevealSoonDrawer, setShowRevealSoonDrawer] = useState(false);
 
   if (isPending) return <Spinner mx="auto" />;
@@ -333,7 +332,7 @@ export const MintGMOCC = memo(() => {
                   <LeaderboardAvatar
                     key={index}
                     occId={item.id}
-                    occImageUrl={item.imageUrl}
+                    occImageUrl={IMAGES.create.gm}
                     rank={index + 1}
                   />
                   <div className="ml-3 mt-1.5 flex items-center gap-1.5">

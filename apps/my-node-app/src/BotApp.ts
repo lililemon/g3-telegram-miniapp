@@ -91,7 +91,7 @@ export class BotApp {
               id: `${stickerId} ${from.id}`,
               title: mapStickerTypeToStickerTemplate[stickerType].title,
               thumbnail_url:
-                "https://www.gall3ry.io/assets/landing/union/gall3ry-logo-squared.png",
+                "https://staging.miniapp.gall3ry.io/images/create/gm.png",
               description:
                 mapStickerTypeToStickerTemplate[stickerType].description,
               input_message_content: {

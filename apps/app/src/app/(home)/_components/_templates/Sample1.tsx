@@ -158,11 +158,15 @@ export const Sample1 = memo(
         });
       } else if (recording === "done_capturing_static_template") {
         setTimeout(() => {
-          void getGifFromImages([canvas!.toDataURL()]).then((image) => {
-            // throw event
-            dispatchEvent(image);
-            return Promise.resolve();
-          });
+          const image = canvas!.toDataURL();
+
+          void getGifFromImages(Array.from({ length: 20 }, () => image)).then(
+            (image) => {
+              // throw event
+              dispatchEvent(image);
+              return Promise.resolve();
+            },
+          );
         }, 1000);
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps

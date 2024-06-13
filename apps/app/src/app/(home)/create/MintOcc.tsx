@@ -199,9 +199,9 @@ export const MintOCC = () => {
         <DrawerContent>
           <div className="px-5">
             <div className="aspect-square w-full rounded-xl">
-              {selectedSticker?.imageUrl &&
+              {selectedSticker?.GMNFT.imageUrl &&
                 mapStickerTypeToTemplateComponent(selectedSticker.stickerType, {
-                  imageUrl: selectedSticker.imageUrl,
+                  imageUrl: selectedSticker.GMNFT.imageUrl,
                 })}
             </div>
           </div>

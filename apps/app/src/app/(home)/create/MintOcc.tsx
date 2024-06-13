@@ -589,7 +589,7 @@ export const SelectAssetDrawer = memo(() => {
                 generateSticker({
                   nfts: selectedAssets.map((asset) => ({
                     imageUrl: asset.imageUrl,
-                    nftAddress: `${userId}-${occ.id}`,
+                    nftAddress: `${userId}-${asset.nftAddress}`,
                   })),
                 }),
                 {

@@ -16,7 +16,7 @@ worker = "pnpm --filter=worker start"
 [env]
 
 [[vm]]
-memory = '1gb'
+memory = '2gb'
 cpu_kind = 'shared'
 cpus = 4
 
@@ -29,7 +29,7 @@ auto_stop_machines = false
 auto_start_machines = false
 min_machines_running = 0
 [[http_service.checks]]
-grace_period = "30s"
+grace_period = "60s"
 interval = "15s"
 method = "GET"
 timeout = "10s"

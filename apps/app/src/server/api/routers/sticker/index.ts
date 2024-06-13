@@ -26,6 +26,13 @@ export const stickerRouter = createTRPCRouter({
       const [items, total] = await Promise.all([
         db.sticker.findMany({
           where: where,
+          include: {
+            GMNFT: {
+              select: {
+                imageUrl: true,
+              },
+            },
+          },
         }),
         db.sticker.count({
           where: where,
@@ -47,6 +54,13 @@ export const stickerRouter = createTRPCRouter({
     )
     .query(async ({ input: { id } }) => {
       return db.sticker.findFirst({
+        include: {
+          GMNFT: {
+            select: {
+              imageUrl: true,
+            },
+          },
+        },
         where: {
           id,
         },

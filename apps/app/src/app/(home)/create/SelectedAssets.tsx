@@ -21,7 +21,7 @@ export const SelectedAssets = () => {
 
   const renderNFT = (nft: NonNullable<typeof gmNFTs>[number]) => {
     return (
-      <div className="relative">
+      <div className="relative" key={nft.id}>
         <div
           className="aspect-square w-full rounded-xl bg-cover"
           style={{

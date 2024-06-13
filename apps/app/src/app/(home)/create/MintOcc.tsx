@@ -721,13 +721,14 @@ export const AllStickers = memo(() => {
                 }}
                 className="relative aspect-square w-full rounded-xl"
               >
-                {sticker.imageUrl && (
+                {
                   <div className="aspect-square cursor-pointer">
-                    {mapStickerTypeToTemplateComponent(sticker.stickerType, {
-                      imageUrl: sticker.imageUrl,
-                    })}
+                    {sticker.GMNFT.imageUrl &&
+                      mapStickerTypeToTemplateComponent(sticker.stickerType, {
+                        imageUrl: sticker.GMNFT.imageUrl,
+                      })}
                   </div>
-                )}
+                }
 
                 <div className="absolute bottom-2 left-2 h-6 rounded-lg bg-white px-2 py-0.5">
                   <div className="text-center text-sm font-bold leading-tight text-slate-900">

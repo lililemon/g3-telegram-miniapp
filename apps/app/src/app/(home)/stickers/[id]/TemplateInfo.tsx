@@ -24,9 +24,9 @@ export const TemplateInfo = () => {
 
   return (
     <div className={styles.swiper}>
-      {sticker?.imageUrl &&
+      {sticker?.GMNFT.imageUrl &&
         mapStickerTypeToTemplateComponent(sticker.stickerType, {
-          imageUrl: sticker.imageUrl,
+          imageUrl: sticker.GMNFT.imageUrl,
           shouldRecord: shouldRecord,
         })}
 

@@ -118,6 +118,7 @@ export class AppService {
   async getGif(payload: {
     stickerIds: number[];
   }): Promise<{ stickerId: number; cdnUrl: string }[]> {
+    console.log(`[getGif] Start, payload: ${JSON.stringify(payload)}`);
     const fn = z
       .function()
       .args(
@@ -139,7 +140,9 @@ export class AppService {
         let browser: Browser | null = null;
         try {
           const pqueue = new PQueue({ concurrency: 2 });
-          browser = await chromium.launch();
+          browser = await chromium.launch({
+            headless: true,
+          });
 
           const stickers = await db.sticker.findMany({
             where: {

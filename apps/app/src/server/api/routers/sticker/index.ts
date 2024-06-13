@@ -4,7 +4,11 @@ import { z } from "zod";
 import { env } from "../../../../env";
 import { db } from "../../../db";
 import { pushToQueue, QUEUE_NAME } from "../../services/upstash";
-import { createTRPCRouter, protectedProcedure } from "../../trpc";
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+} from "../../trpc";
 
 export const stickerRouter = createTRPCRouter({
   getStickers: protectedProcedure.query(
@@ -46,7 +50,7 @@ export const stickerRouter = createTRPCRouter({
     },
   ),
 
-  getSticker: protectedProcedure
+  getSticker: publicProcedure
     .input(
       z.object({
         id: z.number(),

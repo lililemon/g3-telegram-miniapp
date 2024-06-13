@@ -71,10 +71,7 @@ jobs:
         uses: superfly/flyctl-actions/setup-flyctl@master
       
       - name: Deploy app (worker)
-        run: flyctl deploy --build-arg TURBO_TEAM="${{ secrets.TURBO_TEAM }}" --build-arg TURBO_TOKEN="${{ secrets.TURBO_TOKEN }}" -c ./fly.worker.toml --image ${{ steps.prep.outputs.tagged_image }} 
-      
-      # - name: Deploy app (bot)
-      #   run: flyctl deploy --local-only --build-arg TURBO_TEAM="${{ secrets.TURBO_TEAM }}" --build-arg TURBO_TOKEN="${{ secrets.TURBO_TOKEN }}" -c ./fly.bot.toml
+        run: LOG_LEVEL=debug flyctl deploy --build-arg TURBO_TEAM="${{ secrets.TURBO_TEAM }}" --build-arg TURBO_TOKEN="${{ secrets.TURBO_TOKEN }}" -c ./fly.worker.toml --image ${{ steps.prep.outputs.tagged_image }} 
 
   deploy-bot:
     name: Deploy bot

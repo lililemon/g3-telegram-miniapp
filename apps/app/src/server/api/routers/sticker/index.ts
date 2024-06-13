@@ -3,7 +3,7 @@ import { type Prisma, StickerType } from "database";
 import { z } from "zod";
 import { env } from "../../../../env";
 import { db } from "../../../db";
-import { pushToQueue, QUEUE_NAME } from "../../services/upstash";
+import { publish } from "../../services/upstash";
 import {
   createTRPCRouter,
   protectedProcedure,
@@ -156,7 +156,7 @@ export const stickerRouter = createTRPCRouter({
       if (env.NEXT_PUBLIC_G3_ENV !== "development") {
         const urlToFetch = `${env.WORKER_PUBLIC_URL}/webhook/sticker/capture-gif`;
         // send capturing
-        await pushToQueue(QUEUE_NAME.STICKER_CAPTURE_GIF, {
+        await publish({
           body: {
             stickerIds: stickers.map((sticker) => sticker.id),
           },

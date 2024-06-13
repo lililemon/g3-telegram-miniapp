@@ -267,8 +267,9 @@ export const MintOCC = () => {
                     chatTypes: ["channels", "groups", "users"],
                   });
                 }}
+                disabled={!selectedSticker?.imageUrl}
               >
-                Send
+                {selectedSticker?.imageUrl ? "Share" : "Loading..."}
               </Button>
             </div>
           </div>

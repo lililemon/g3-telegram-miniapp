@@ -55,7 +55,7 @@ export const MyOCC = () => {
 
               <Table.Cell align="right">
                 <Button asChild>
-                  <Link href={`/occ/${occ.id}`}>View</Link>
+                  <Link href={`/stickers/${occ.id}`}>View</Link>
                 </Button>
 
                 <Button

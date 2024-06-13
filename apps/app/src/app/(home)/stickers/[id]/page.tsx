@@ -13,11 +13,17 @@ export async function generateMetadata({
   };
 }) {
   unstable_noStore();
-  const sticker = await db.sticker.findUniqueOrThrow({
+  const sticker = await db.sticker.findUnique({
     where: {
       id: +params.id,
     },
   });
+
+  if (!sticker) {
+    return {
+      notFound: true,
+    };
+  }
 
   const title = `Sticker #${sticker.id}`;
   const images = [];

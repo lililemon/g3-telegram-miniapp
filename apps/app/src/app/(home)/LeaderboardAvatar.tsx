@@ -16,7 +16,7 @@ export const LeaderboardAvatar = ({
         {rank}
       </div>
 
-      <Link href={`/occ/${occId}`}>
+      <Link href={`/stickers/${occId}`}>
         <Avatar
           fallback="?"
           className="ml-2 mt-2 aspect-square h-28 w-28 rounded-xl bg-contain"

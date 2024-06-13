@@ -43,6 +43,24 @@ export const callOrGetFromCache = async <T>(
   return value;
 };
 
+export const publish = async <T>(request: PublishRequest<T>) => {
+  if (env.NODE_ENV === "development") {
+    if (!request?.url) {
+      throw new Error("request.url is required");
+    }
+
+    await axios.post(request.url, request.body);
+
+    return `mocked-message-id-${Math.random()}`;
+  }
+
+  const { messageId } = (await qstash.publishJSON<T>(
+    request,
+  )) as PublishToUrlResponse;
+
+  return messageId;
+};
+
 export const pushToQueue = async <T>(
   queueName: QUEUE_NAME,
   request: PublishRequest<T>,

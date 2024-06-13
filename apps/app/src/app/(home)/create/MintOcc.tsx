@@ -19,6 +19,7 @@ import { IconCheck } from "../_icons/IconCheck";
 import { IconEffect } from "../_icons/IconEffect";
 import { LeaderboardAvatar } from "../LeaderboardAvatar";
 import { IconLock } from "../templates/[id]/_components/IconLock";
+import { useUser } from "../useUser";
 import { EffectItem } from "./EffectItem";
 import { mockAssets } from "./MOCK_ASSET";
 import { MOCK_TX_HASH } from "./MOCK_TX_HASH";
@@ -472,6 +473,8 @@ export const SelectAssetDrawer = memo(() => {
   const [selectedAssets, setSelectedAssets] = useState<
     (typeof mockAssets)[number][]
   >([]);
+  const { data: user } = useUser();
+  const userId = user?.id;
   const utils = api.useUtils();
   const { mutateAsync: generateSticker } =
     api.sticker.generateSticker.useMutation({
@@ -578,14 +581,16 @@ export const SelectAssetDrawer = memo(() => {
           <Button
             size="4"
             onClick={async () => {
-              if (!occ?.id) {
+              if (!occ?.id || !userId) {
                 throw new Error("No occ id");
               }
 
               await toast.promise(
                 generateSticker({
-                  nfts: selectedAssets,
-                  occId: occ.id,
+                  nfts: selectedAssets.map((asset) => ({
+                    imageUrl: asset.imageUrl,
+                    nftAddress: `${userId}-${occ.id}`,
+                  })),
                 }),
                 {
                   loading: "Generating sticker...",

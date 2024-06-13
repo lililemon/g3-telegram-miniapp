@@ -136,18 +136,19 @@ export const stickerRouter = createTRPCRouter({
         skipDuplicates: true,
       });
 
-      const urlToFetch = `${env.WORKER_PUBLIC_URL}/webhook/sticker/capture-gif`;
-
-      // send capturing
-      void pushToQueue(QUEUE_NAME.STICKER_CAPTURE_GIF, {
-        body: {
-          stickerIds: stickers.map((sticker) => sticker.id),
-        },
-        url: urlToFetch,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      if (env.NEXT_PUBLIC_G3_ENV !== "development") {
+        const urlToFetch = `${env.WORKER_PUBLIC_URL}/webhook/sticker/capture-gif`;
+        // send capturing
+        void pushToQueue(QUEUE_NAME.STICKER_CAPTURE_GIF, {
+          body: {
+            stickerIds: stickers.map((sticker) => sticker.id),
+          },
+          url: urlToFetch,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+      }
 
       return {
         stickers,

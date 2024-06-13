@@ -1,7 +1,9 @@
 import { TRPCError } from "@trpc/server";
-import { Prisma, StickerType } from "database";
+import { type Prisma, StickerType } from "database";
 import { z } from "zod";
+import { env } from "../../../../env";
 import { db } from "../../../db";
+import { pushToQueue, QUEUE_NAME } from "../../services/upstash";
 import { createTRPCRouter, protectedProcedure } from "../../trpc";
 
 export const stickerRouter = createTRPCRouter({
@@ -24,6 +26,20 @@ export const stickerRouter = createTRPCRouter({
       });
     },
   ),
+
+  getSticker: protectedProcedure
+    .input(
+      z.object({
+        id: z.number(),
+      }),
+    )
+    .query(async ({ input: { id } }) => {
+      return db.sticker.findFirst({
+        where: {
+          id,
+        },
+      });
+    }),
 
   getGMNFTs: protectedProcedure.query(
     async ({
@@ -106,6 +122,19 @@ export const stickerRouter = createTRPCRouter({
       const stickers = await db.sticker.createManyAndReturn({
         data: data satisfies Prisma.StickerCreateManyInput[],
         skipDuplicates: true,
+      });
+
+      const urlToFetch = `${env.WORKER_PUBLIC_URL}/webhook/sticker/capture-gif`;
+
+      // send capturing
+      void pushToQueue(QUEUE_NAME.STICKER_CAPTURE_GIF, {
+        body: {
+          stickerIds: stickers.map((sticker) => sticker.id),
+        },
+        url: urlToFetch,
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
 
       return {

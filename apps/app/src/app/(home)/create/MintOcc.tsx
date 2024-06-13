@@ -247,7 +247,7 @@ export const MintOCC = () => {
         <DrawerContent>
           <div className="px-5">
             <div className="aspect-square w-full rounded-xl">
-              {selectedSticker?.stickerType &&
+              {selectedSticker?.imageUrl &&
                 mapStickerTypeToTemplateComponent(selectedSticker.stickerType, {
                   imageUrl: selectedSticker.imageUrl,
                 })}
@@ -477,8 +477,8 @@ export const MintGMOCC = () => {
                   setIsLoading(false);
                 }
               }}
-              disabled={isLoading}
               className="w-full"
+              loading={isLoading}
             >
               Confirm to mint
             </Button>
@@ -522,6 +522,7 @@ export const SelectAssetDrawer = () => {
     api.sticker.generateSticker.useMutation({
       onSuccess: () => {
         void utils.sticker.getStickers.invalidate();
+        void utils.sticker.getGMNFTs.invalidate();
       },
     });
   const { data: occ } = api.occ.getOcc.useQuery(undefined, {

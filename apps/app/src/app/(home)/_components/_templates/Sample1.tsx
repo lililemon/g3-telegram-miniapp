@@ -141,34 +141,37 @@ export const Sample1 = memo(
     }, []);
 
     useEffect(() => {
-      if (recording === "recording") {
-        //  if not animation
-        console.log(rive?.playingStateMachineNames);
-
-        if (rive?.playingStateMachineNames.length === 0) {
-          // capture
-          setImages((prev) => [...prev, canvas!.toDataURL()]);
-          setRecording("done_capturing_static_template");
+      switch (recording) {
+        case "recording": {
+          if (rive?.playingStateMachineNames.length === 0) {
+            setRecording("done_capturing_static_template");
+          }
+          break;
         }
-      } else if (recording === "done") {
-        void getGifFromImages(images).then((image) => {
-          // throw event
-          dispatchEvent(image);
-          return Promise.resolve();
-        });
-      } else if (recording === "done_capturing_static_template") {
-        setTimeout(() => {
-          const image = canvas!.toDataURL();
+        case "done": {
+          void getGifFromImages(images).then((image) => {
+            // throw event
+            dispatchEvent(image);
+            return Promise.resolve();
+          });
+          break;
+        }
+        case "done_capturing_static_template": {
+          setTimeout(() => {
+            const image = canvas!.toDataURL();
 
-          void getGifFromImages(Array.from({ length: 20 }, () => image)).then(
-            (image) => {
-              // throw event
-              dispatchEvent(image);
-              return Promise.resolve();
-            },
-          );
-        }, 1000);
+            void getGifFromImages(Array.from({ length: 20 }, () => image)).then(
+              (image) => {
+                // throw event
+                dispatchEvent(image);
+                return Promise.resolve();
+              },
+            );
+          }, 1000);
+          break;
+        }
       }
+
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [recording]);
 

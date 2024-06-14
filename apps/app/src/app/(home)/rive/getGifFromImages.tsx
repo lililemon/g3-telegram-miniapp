@@ -16,8 +16,8 @@ export const getGifFromImages = (images: string[]) => {
     gifshot.createGIF(
       {
         images,
-        gifWidth: 320,
-        gifHeight: 320,
+        gifWidth: 900,
+        gifHeight: 900,
         numFrames: 20, // 2s
         frameDuration: 1,
       },

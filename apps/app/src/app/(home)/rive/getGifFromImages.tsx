@@ -16,15 +16,19 @@ export const getGifFromImages = (images: string[]) => {
     gifshot.createGIF(
       {
         images,
-        gifWidth: 900,
-        gifHeight: 900,
+        gifWidth: 512,
+        gifHeight: 512,
         numFrames: 20, // 2s
         frameDuration: 1,
+        sampleInterval: 3,
       },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       function (obj: any) {
         if (!obj.error) {
           const image = obj.image;
+
+          // new tab
+          window.open(image as string);
 
           resolve(image as string);
         }

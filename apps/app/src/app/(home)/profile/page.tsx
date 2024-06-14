@@ -42,7 +42,7 @@ const Page = () => {
 
   return (
     <>
-      <div className="flex h-[92px] items-center justify-between gap-4 rounded-xl bg-[#F8FFB7] p-4">
+      <div className="flex h-[92px] items-center justify-between gap-4 rounded-xl bg-[#F0FFF5] p-4">
         <div className="flex items-center gap-4">
           {user?.displayName && (
             <Avatar

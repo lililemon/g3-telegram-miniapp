@@ -36,7 +36,7 @@ export class LeaderboardService {
         id: 1,
         userId: 1,
         address: "UQBIUXf9B4qfK2TobZ437S6i-YOGm-EKkzp1fTgAPBmL_Swd",
-        avatarUrl: IMAGES.MOCK_OCC[1],
+        avatarUrl: IMAGES.MOCK_AVATAR[1],
       },
       {
         displayName: "PhantomBlade",
@@ -44,7 +44,7 @@ export class LeaderboardService {
         id: 2,
         userId: 2,
         address: "UQBIUXf9B4qfK2TobZ437S6i-YOGm-EKkzp1fTgAPBmL_Swd",
-        avatarUrl: IMAGES.MOCK_OCC[2],
+        avatarUrl: IMAGES.MOCK_AVATAR[2],
       },
       {
         displayName: "CyberWarrior",
@@ -52,7 +52,7 @@ export class LeaderboardService {
         id: 3,
         userId: 3,
         address: "UQBIUXf9B4qfK2TobZ437S6i-YOGm-EKkzp1fTgAPBmL_Swd",
-        avatarUrl: IMAGES.MOCK_OCC[3],
+        avatarUrl: IMAGES.MOCK_AVATAR[3],
       },
 
       {
@@ -61,7 +61,7 @@ export class LeaderboardService {
         id: 4,
         userId: 4,
         address: "UQBIUXf9B4qfK2TobZ437S6i-YOGm-EKkzp1fTgAPBmL_Swd",
-        avatarUrl: IMAGES.MOCK_OCC[4],
+        avatarUrl: IMAGES.MOCK_AVATAR[4],
       },
       {
         displayName: "FrostBite",
@@ -69,7 +69,7 @@ export class LeaderboardService {
         id: 5,
         userId: 5,
         address: "UQBIUXf9B4qfK2TobZ437S6i-YOGm-EKkzp1fTgAPBmL_Swd",
-        avatarUrl: IMAGES.MOCK_OCC[5],
+        avatarUrl: IMAGES.MOCK_AVATAR[5],
       },
     ];
 

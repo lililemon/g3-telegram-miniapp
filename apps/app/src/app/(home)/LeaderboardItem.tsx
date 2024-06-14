@@ -60,7 +60,7 @@ export const LeaderboardItem = ({
               {Intl.NumberFormat().format(shareCount)}
             </div>
             <div className="text-sm font-medium leading-tight tracking-tight text-slate-900">
-              shares
+              share{shareCount === 1 ? "" : "s"}
             </div>
           </div>
         </div>

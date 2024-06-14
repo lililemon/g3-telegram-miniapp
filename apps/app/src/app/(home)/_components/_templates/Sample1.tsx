@@ -164,6 +164,7 @@ export const Sample1 = memo(
               (image) => {
                 // throw event
                 dispatchEvent(image);
+
                 return Promise.resolve();
               },
             );

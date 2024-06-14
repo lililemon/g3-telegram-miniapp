@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { usePostHog } from "posthog-js/react";
 import { api } from "../../../../trpc/react";
 import { useIsAuthenticated } from "../../../_providers/useAuth";
+import { IconPoints } from "../../_icons/IconPoints";
 
 function UserMenu() {
   const { isAuthenticated } = useIsAuthenticated();
@@ -30,8 +31,14 @@ function UserMenu() {
           }}
         >
           <div className="flex items-center gap-3">
-            <div className="text-right text-xl font-bold text-slate-900">
-              {user.displayName}
+            <div className="5 flex items-center gap-1">
+              <div className="size-6">
+                <IconPoints />
+              </div>
+
+              <div className="text-right text-xl font-bold leading-7 text-slate-900">
+                {user.point}
+              </div>
             </div>
             <Avatar
               className="h-10 w-10 rounded-[40px] border-2 border-[#14DB60]"

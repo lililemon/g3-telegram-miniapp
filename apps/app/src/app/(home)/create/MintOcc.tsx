@@ -1,5 +1,5 @@
 "use client";
-import { Button, RadioGroup, Skeleton, Spinner } from "@radix-ui/themes";
+import { Button, Skeleton, Spinner } from "@radix-ui/themes";
 import { useInitData } from "@tma.js/sdk-react";
 import Image from "next/image";
 import { parseAsBoolean, parseAsInteger, useQueryState } from "nuqs";
@@ -17,12 +17,14 @@ import { Drawer, DrawerContent } from "../_components/Drawer";
 import { IconAsset } from "../_icons/IconAsset";
 import { IconCheck } from "../_icons/IconCheck";
 import { IconEffect } from "../_icons/IconEffect";
+import { IconPoints } from "../_icons/IconPoints";
 import { LeaderboardAvatar } from "../LeaderboardAvatar";
 import { IconLock } from "../templates/[id]/_components/IconLock";
 import { useUser } from "../useUser";
 import { EffectItem } from "./EffectItem";
 import { mockAssets } from "./MOCK_ASSET";
 import { MOCK_TX_HASH } from "./MOCK_TX_HASH";
+import { Option } from "./Option";
 import { SelectedAssets } from "./SelectedAssets";
 import { useWebAppSwitchInlineQuery } from "./useWebAppSwitchInlineQuery";
 
@@ -285,7 +287,8 @@ export const MintGMOCC = memo(() => {
   const { sendMintNftFromFaucet } = useNftContract();
   const { mutateAsync } = api.occ.createOCC.useMutation();
   const [isLoading, setIsLoading] = useState(false);
-  const { mutateAsync: mintByEpicMutateAsync } = api.occ.mintOCCbyEpic.useMutation();
+  const { mutateAsync: mintByEpicMutateAsync } =
+    api.occ.mintOCCbyEpic.useMutation();
   const [mintByEpicPoint, setMintByEpicPoint] = useState(true);
   const [showDrawer, setShowDrawer] = useQueryState(
     "showDrawer",
@@ -414,7 +417,7 @@ export const MintGMOCC = memo(() => {
                       {item.shareCount}
                     </div>
                     <div className="text-sm font-medium leading-tight tracking-tight text-slate-900">
-                      shares
+                      share{item.shareCount === 1 ? "" : "s"}
                     </div>
                   </div>
                 </div>
@@ -441,35 +444,28 @@ export const MintGMOCC = memo(() => {
           </div>
 
           <div className="mt-5">
-            <RadioGroup.Root
-              defaultValue="1"
-              name="example"
-              className="flex flex-row items-center justify-center gap-8"
-              size="3"
-            >
-              <RadioGroup.Item
-                value="1"
-                className="flex items-center"
-                onClick={() => {
-                  setMintByEpicPoint(true);
-                }}
-              >
-                <div className="text-xl font-bold leading-7 text-slate-900">
-                  100 EPIC
-                </div>
-              </RadioGroup.Item>
-              <RadioGroup.Item
-                value="2"
-                className="flex items-center"
-                onClick={() => {
-                  setMintByEpicPoint(false);
-                }}
-              >
-                <div className="text-xl font-bold leading-7 text-slate-900">
-                  0.3 TON
-                </div>
-              </RadioGroup.Item>
-            </RadioGroup.Root>
+            <div defaultValue="1" className="grid gap-3 px-5">
+              <Option
+                onClick={() => setMintByEpicPoint(true)}
+                icon={<IconPoints />}
+                text="100 EPIC"
+                isActive={mintByEpicPoint}
+              />
+
+              <Option
+                onClick={() => setMintByEpicPoint(false)}
+                icon={
+                  <Image
+                    src={IMAGES.create.ton_logo}
+                    width={24}
+                    height={24}
+                    alt=""
+                  />
+                }
+                text="0.3 TON"
+                isActive={!mintByEpicPoint}
+              />
+            </div>
           </div>
 
           <div className="mb-3 mt-8 space-y-3 px-5">
@@ -683,7 +679,7 @@ export const RevealSoonDrawer = memo(
             Telegram friends
           </div>
 
-          <div className="mt-2">
+          <div className="mx-5 mt-2">
             <div className="text-center text-base font-light leading-normal tracking-tight text-slate-500">
               Share more GMs and level up your avatar to unlock more GM effects.
             </div>
@@ -786,7 +782,8 @@ export const AllStickers = memo(() => {
 
                 <div className="absolute bottom-2 left-2 h-6 rounded-lg bg-white px-2 py-0.5">
                   <div className="text-center text-sm font-bold leading-tight text-slate-900">
-                    {sticker.shareCount} shares
+                    {sticker.shareCount} share
+                    {sticker.shareCount === 1 ? "" : "s"}
                   </div>
                 </div>
               </div>

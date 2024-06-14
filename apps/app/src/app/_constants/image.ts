@@ -10,6 +10,13 @@ export const IMAGES = {
     4: "/images/mock-occ/4.png",
     5: "/images/mock-occ/5.png",
   },
+  MOCK_AVATAR: {
+    1: "/images/mock-avatar/1.png",
+    2: "/images/mock-avatar/2.png",
+    3: "/images/mock-avatar/3.png",
+    4: "/images/mock-avatar/4.png",
+    5: "/images/mock-avatar/5.png",
+  },
   MOCK_STICKER: {
     1: "https://api.akord.com/files/f480eb9c-8ec0-4222-be57-70725a679fd2",
     2: "https://api.akord.com/files/89a57953-f3da-45c2-ade5-93dec5d77c08",

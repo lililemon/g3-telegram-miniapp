@@ -31,7 +31,7 @@ export class LeaderboardService {
   }> {
     const mockData = [
       {
-        displayName: "RonasFrank",
+        displayName: "Jun_Gall3ry",
         shareCount: 2213,
         id: 1,
         userId: 1,

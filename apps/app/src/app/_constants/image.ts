@@ -32,4 +32,5 @@ export const IMAGES = {
   },
 
   balance_bg: "/images/balance_bg.png",
+  avatar: "/images/avatar.png",
 } as const;

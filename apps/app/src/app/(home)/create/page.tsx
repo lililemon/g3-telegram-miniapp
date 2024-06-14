@@ -10,7 +10,7 @@ const Page = () => {
   const items = [
     {
       name: "GM",
-      imageUrl: IMAGES.MOCK_OCC[1],
+      imageUrl: IMAGES.create.gm,
     },
     {
       name: "PNL",

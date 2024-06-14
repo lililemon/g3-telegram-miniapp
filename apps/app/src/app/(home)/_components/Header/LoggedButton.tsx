@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { usePostHog } from "posthog-js/react";
 import { api } from "../../../../trpc/react";
+import { IMAGES } from "../../../_constants/image";
 import { useIsAuthenticated } from "../../../_providers/useAuth";
 import { IconPoints } from "../../_icons/IconPoints";
 
@@ -42,7 +43,8 @@ function UserMenu() {
             </div>
             <Avatar
               className="h-10 w-10 rounded-[40px] border-2 border-[#14DB60]"
-              src={user.avatarUrl ?? undefined}
+              // src={user.avatarUrl ?? undefined}
+              src={IMAGES.avatar}
               fallback={user.displayName?.[0] ?? "?"}
               alt="avatar"
             />

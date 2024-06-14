@@ -4,6 +4,7 @@ import { formatTonAddress } from "@repo/utils";
 import { toUserFriendlyAddress } from "@tonconnect/sdk";
 import { memo, useMemo, useState } from "react";
 import { api } from "../../../trpc/react";
+import { IMAGES } from "../../_constants/image";
 import { Drawer, DrawerContent, DrawerFooter } from "../_components/Drawer";
 import { LoggedUserOnly } from "../_components/LoggedUserOnly";
 import { useUser } from "../useUser";
@@ -48,7 +49,8 @@ const Page = () => {
             <Avatar
               fallback={user.displayName[0] ?? ""}
               className="h-[60px] w-[60px] rounded-xl"
-              src={user?.avatarUrl ?? ""}
+              // src={user?.avatarUrl ?? ""}
+              src={IMAGES.avatar}
               alt=""
             />
           )}

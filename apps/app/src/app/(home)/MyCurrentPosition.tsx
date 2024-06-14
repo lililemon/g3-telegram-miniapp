@@ -19,8 +19,8 @@ export const MyCurrentPosition = () => {
             <LeaderboardItem
               occId={data.occId}
               avatarUrl={data.avatarUrl}
-              occImageUrl={(IMAGES.MOCK_OCC as any)[data.rank % 5]}
-              rank={2}
+              occImageUrl={(IMAGES.MOCK_STICKER as any)[data.rank % 5]}
+              rank={1}
               shareCount={data.shareCount}
               username={data.username}
               address={data.address}

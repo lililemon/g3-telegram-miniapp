@@ -14,12 +14,12 @@ const Page = () => {
     },
     {
       name: "PNL",
-      imageUrl: IMAGES.MOCK_OCC[2],
+      imageUrl: IMAGES.create.pnl,
       isDisabled: true,
     },
     {
       name: "IDCard",
-      imageUrl: IMAGES.MOCK_OCC[3],
+      imageUrl: IMAGES.create.card,
       isDisabled: true,
     },
   ];

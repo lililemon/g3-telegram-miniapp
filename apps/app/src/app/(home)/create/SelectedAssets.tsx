@@ -44,7 +44,7 @@ export const SelectedAssets = () => {
     <>
       <div className="mt-5 flex items-center justify-between">
         <div className="text-xl font-bold leading-7 text-slate-900">
-          GM Stickers
+          My GM assets
         </div>
         <button
           className="cursor-pointer text-right text-base font-medium leading-normal tracking-tight text-blue-400"

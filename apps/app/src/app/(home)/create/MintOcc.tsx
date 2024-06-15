@@ -271,7 +271,7 @@ export const MintOCC = () => {
                 }}
                 disabled={!selectedSticker?.imageUrl}
               >
-                {selectedSticker?.imageUrl ? "Share" : "Loading..."}
+                {selectedSticker?.imageUrl ? "Send GM Sticker" : "Loading..."}
               </Button>
             </div>
           </div>
@@ -502,7 +502,7 @@ export const MintGMOCC = memo(() => {
           <div className="size-6">
             <IconLock />
           </div>
-          Mint GM
+          MINT GM UGC TEMPLATE
         </Button>
       </div>
     </div>

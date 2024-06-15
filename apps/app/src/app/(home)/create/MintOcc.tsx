@@ -271,7 +271,7 @@ export const MintOCC = () => {
                 }}
                 disabled={!selectedSticker?.imageUrl}
               >
-                {selectedSticker?.imageUrl ? "Send GM Sticker" : "Loading..."}
+                {selectedSticker?.imageUrl ? "Send Sticker" : "Loading..."}
               </Button>
             </div>
           </div>
